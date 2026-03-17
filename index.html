@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lectionnaire ECODIM 2026 - Préparation de leçon</title>
+<style>
+    body { 
+        font-family: Arial, sans-serif; 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px; 
+        margin: 0;
+    }
+    h1 { 
+        text-align: center; 
+        color: white; 
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .container { 
+        max-width: 1000px; 
+        margin: 20px auto; 
+        background: white; 
+        padding: 30px; 
+        border-radius: 15px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+    }
+    select, button { 
+        width: 100%; 
+        padding: 12px; 
+        margin-bottom: 20px; 
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1em;
+    }
+    select:focus {
+        outline: none;
+        border-color: #2980b9;
+    }
+    button { 
+        background-color: #2980b9; 
+        color: white; 
+        border: none; 
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1.1em;
+        transition: background-color 0.3s;
+    }
+    button:hover { 
+        background-color: #1f6391; 
+    }
+    .details { 
+        background: #f8f9fa; 
+        padding: 25px; 
+        border-radius: 10px;
+        margin-top: 20px;
+        max-height: 600px;
+        overflow-y: auto;
+    }
+    
+    /* Style pour le résumé (éléments principaux) */
+    .summary {
+        background: #2980b9;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
+    }
+    .summary p {
+        margin: 12px 0;
+        font-size: 1.1em;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        padding-bottom: 8px;
+    }
+    .summary .label {
+        color: #ffd966;
+        font-weight: bold;
+        display: inline-block;
+        min-width: 130px;
+    }
+    .summary .value {
+        color: white;
+        font-weight: normal;
+    }
+    
+    /* Style pour la préparation détaillée */
+    .preparation {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #2980b9;
+    }
+    .preparation h3 {
+        color: #2980b9;
+        margin: 20px 0 10px 0;
+        border-bottom: 2px solid #2980b9;
+        padding-bottom: 5px;
+    }
+    .preparation h4 {
+        color: #2c3e50;
+        margin: 15px 0 5px 0;
+        font-style: italic;
+    }
+    .preparation p { 
+        margin: 10px 0;
+        padding: 8px 12px;
+        background: #f8f9fa;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        line-height: 1.6;
+    }
+    .label { 
+        font-weight: bold; 
+        color: #2980b9; 
+        display: inline-block;
+        min-width: 120px;
+    }
+    .highlight {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 10px 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .verse {
+        background: #e8f4fd;
+        border-left: 4px solid #2980b9;
+        padding: 10px 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        font-style: italic;
+    }
+    .quick-nav {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+    .month-selector {
+        flex: 3;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+    }
+    .month-btn, .reset-btn {
+        background: #ecf0f1;
+        color: #2c3e50;
+        border: none;
+        padding: 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: all 0.3s;
+    }
+    .month-btn:hover {
+        background: #2980b9;
+        color: white;
+    }
+    .reset-btn {
+        flex: 1;
+        background: #e74c3c;
+        color: white;
+        font-weight: bold;
+    }
+    .reset-btn:hover {
+        background: #c0392b;
+    }
+    .counter {
+        text-align: right;
+        font-size: 0.9em;
+        color: #7f8c8d;
+        margin-bottom: 5px;
+    }
+    
+    /* Style pour les listes dans la préparation */
+    .preparation ul, .preparation ol {
+        background: #f8f9fa;
+        padding: 15px 15px 15px 35px;
+        border-radius: 8px;
+        margin: 10px 0;
+    }
+    .preparation li {
+        margin-bottom: 8px;
+    }
+</style>
+</head>
+<body>
+
+<h1>📖 Préparation de leçon - ECODIM 2026</h1>
+
+<div class="container">
+    
+    <!-- Navigation mois avec bouton reset -->
+    <div class="quick-nav">
+        <div class="month-selector">
+            <button class="month-btn" onclick="filterMonth('Janvier')">Janvier</button>
+            <button class="month-btn" onclick="filterMonth('Février')">Février</button>
+            <button class="month-btn" onclick="filterMonth('Mars')">Mars</button>
+            <button class="month-btn" onclick="filterMonth('Avril')">Avril</button>
+            <button class="month-btn" onclick="filterMonth('Mai')">Mai</button>
+            <button class="month-btn" onclick="filterMonth('Juin')">Juin</button>
+            <button class="month-btn" onclick="filterMonth('Juillet')">Juillet</button>
+            <button class="month-btn" onclick="filterMonth('Août')">Août</button>
+            <button class="month-btn" onclick="filterMonth('Septembre')">Septembre</button>
+            <button class="month-btn" onclick="filterMonth('Octobre')">Octobre</button>
+            <button class="month-btn" onclick="filterMonth('Novembre')">Novembre</button>
+            <button class="month-btn" onclick="filterMonth('Décembre')">Décembre</button>
+        </div>
+        <button class="reset-btn" onclick="resetFilter()">Tous les mois</button>
+    </div>
+    
+    <!-- Compteur de dimanches -->
+    <div class="counter" id="counter">52 dimanches au total</div>
+    
+    <label for="sundaySelect">📅 Choisir un dimanche :</label>
+    <select id="sundaySelect">
+        <option value="">-- Sélectionnez un dimanche --</option>
+        <option value="04 Janvier">04 Janvier</option>
+        <option value="11 Janvier">11 Janvier</option>
+        <option value="18 Janvier">18 Janvier</option>
+        <option value="25 Janvier">25 Janvier</option>
+        <option value="01 Février">01 Février</option>
+        <option value="08 Février">08 Février</option>
+        <option value="15 Février">15 Février</option>
+        <option value="22 Février">22 Février</option>
+        <option value="01 Mars">01 Mars</option>
+        <option value="08 Mars">08 Mars</option>
+        <option value="15 Mars">15 Mars</option>
+        <option value="22 Mars">22 Mars</option>
+        <option value="29 Mars">29 Mars</option>
+        <option value="05 Avril">05 Avril</option>
+        <option value="12 Avril">12 Avril</option>
+        <option value="19 Avril">19 Avril</option>
+        <option value="26 Avril">26 Avril</option>
+        <option value="03 Mai">03 Mai</option>
+        <option value="10 Mai">10 Mai</option>
+        <option value="14 Mai">14 Mai</option>
+        <option value="17 Mai">17 Mai</option>
+        <option value="24 Mai">24 Mai</option>
+        <option value="31 Mai">31 Mai</option>
+        <option value="07 Juin">07 Juin</option>
+        <option value="14 Juin">14 Juin</option>
+        <option value="21 Juin">21 Juin</option>
+        <option value="28 Juin">28 Juin</option>
+        <option value="29 Juin">29 Juin</option>
+        <option value="05 Juillet">05 Juillet</option>
+        <option value="12 Juillet">12 Juillet</option>
+        <option value="19 Juillet">19 Juillet</option>
+        <option value="26 Juillet">26 Juillet</option>
+        <option value="02 Août">02 Août</option>
+        <option value="09 Août">09 Août</option>
+        <option value="16 Août">16 Août</option>
+        <option value="23 Août">23 Août</option>
+        <option value="30 Août">30 Août</option>
+        <option value="06 Septembre">06 Septembre</option>
+        <option value="13 Septembre">13 Septembre</option>
+        <option value="20 Septembre">20 Septembre</option>
+        <option value="27 Septembre">27 Septembre</option>
+        <option value="04 Octobre">04 Octobre</option>
+        <option value="11 Octobre">11 Octobre</option>
+        <option value="18 Octobre">18 Octobre</option>
+        <option value="25 Octobre">25 Octobre</option>
+        <option value="26 Octobre">26 Octobre</option>
+        <option value="01 Novembre">01 Novembre</option>
+        <option value="02 Novembre">02 Novembre</option>
+        <option value="08 Novembre">08 Novembre</option>
+        <option value="15 Novembre">15 Novembre</option>
+        <option value="22 Novembre">22 Novembre</option>
+        <option value="29 Novembre">29 Novembre</option>
+        <option value="06 Décembre">06 Décembre</option>
+        <option value="13 Décembre">13 Décembre</option>
+        <option value="20 Décembre">20 Décembre</option>
+        <option value="25 Décembre">25 Décembre</option>
+        <option value="27 Décembre">27 Décembre</option>
+    </select>
+
+    <label for="levelSelect">🎯 Choisir le niveau :</label>
+    <select id="levelSelect">
+        <option value="">-- Sélectionnez un niveau --</option>
+        <option value="1">Niveau 1</option>
+        <option value="2">Niveau 2</option>
+        <option value="3">Niveau 3</option>
+    </select>
+
+    <button onclick="showDetails()">Voir la préparation</button>
+
+    <div class="details" id="details">
+        <p style="text-align: center; color: #666;">👋 Sélectionnez un dimanche et un niveau</p>
+    </div>
+</div>
+
+<script>
+// ===== TOUTES LES PRÉPARATIONS DE LEÇON =====
+const lessons = {
+    "04 Janvier": {
+        "titre": "JESUS-CHRIST, L’ALLIANCE NOUVELLE",
+        "lecon": "Leçon 1",
+        "reference": "Ézéchiel 36:20-27, Actes 3:18-26, Luc 3:15-18,21-22",
+        "versetSouligner": "La foi en Jésus-Christ nous rend participants de la nouvelle alliance.",
+        "objectifSpecifique": "Je fais alliance avec mon Seigneur Jésus-Christ.",
+        "objectifOperationnel": "Je comprends que suivre Jésus implique de vivre selon sa parole et d’accepter son amour.",
+        "introduction": "Montrer une corde ou un bracelet symbolisant une alliance et demander : « Si quelqu’un te donne un bracelet pour montrer que vous êtes amis, que ferais-tu pour respecter cette amitié ? » Conclure : « Jésus nous offre une alliance, et nous devons la respecter par nos actions et notre cœur. »",
+        "progression": [
+            "Les prophètes annoncent la venue de Jésus et la nouvelle alliance.",
+            "Jean-Baptiste prépare le peuple à recevoir Jésus.",
+            "Jésus est baptisé et le Saint-Esprit descend sur Lui.",
+            "Les disciples commencent à suivre Jésus et à prêcher la bonne nouvelle.",
+            "Les miracles de Jésus montrent l’amour et la puissance de Dieu."
+        ],
+        "pointCulminant": "Jésus établit l’alliance nouvelle par sa vie, sa mort et sa résurrection.",
+        "messageTransmettre": "Jésus nous invite à entrer dans la nouvelle alliance en l’acceptant et en suivant sa parole.",
+        "messageCentral": "Dieu nous offre une nouvelle alliance par Jésus-Christ. Suivre Jésus, c’est vivre selon sa parole et son amour.",
+        "versetRetenir": "Luc 3:22 - « Et une voix fit entendre du ciel : Tu es mon Fils bien-aimé ; en toi j’ai mis toute mon affection. »",
+        "evaluation": [
+            "Qu’est-ce que signifie faire alliance avec Jésus ?",
+            "Comment pouvons-nous respecter l’alliance avec Jésus ?",
+            "Que montre Jésus à travers ses miracles et son enseignement ?"
+        ]
+    },
+    "11 Janvier": {
+        "titre": "UNE EGLISE, UNE ECOLE DU DIMANCHE BIEN EQUIPÉE",
+        "lecon": "Thème ECODIM 2026",
+        "reference": "Actes 4:20, 32",
+        "versetSouligner": "Quand nous sommes unis, nous glorifions Dieu par nos paroles, nos actes et nos œuvres.",
+        "objectifSpecifique": "Je glorifie le Seigneur par mes paroles, mes actes et mes œuvres.",
+        "objectifOperationnel": "Je comprends qu’être membre actif de l’église et de l’école du dimanche contribue au bien de tous et à la gloire de Dieu.",
+        "introduction": "Montrer une boîte contenant plusieurs crayons ou jouets et demander : « Si chacun partageait ses jouets, tout le monde serait content, non ? » Conclure : « Dans l’église et l’école du dimanche, partager et participer rend tout le monde heureux et glorifie Dieu. »",
+        "progression": [
+            "Les premiers chrétiens se réunissent en communauté.",
+            "Ils partagent tout ce qu’ils ont et aident les plus faibles.",
+            "Ils enseignent et apprennent la parole de Dieu ensemble.",
+            "Ils prient et glorifient Dieu dans leurs actions et leurs paroles."
+        ],
+        "pointCulminant": "Les membres de l’église agissent ensemble pour aider les autres et glorifier Dieu.",
+        "messageTransmettre": "Participer à l’église et à l’école du dimanche permet de grandir dans la foi et de montrer l’amour de Dieu.",
+        "messageCentral": "Être actif dans l’église et l’école du dimanche, c’est glorifier Dieu par nos paroles, nos actes et notre cœur.",
+        "versetRetenir": "Actes 4:32 - « Tous ceux qui croyaient étaient d’un seul cœur et d’une seule âme… »",
+        "evaluation": [
+            "Que font les membres de l’église pour glorifier Dieu ?",
+            "Pourquoi est-il important de partager et participer à l’école du dimanche ?",
+            "Comment pouvons-nous montrer notre amour à Dieu dans nos actions ?"
+        ]
+    },
+    "18 Janvier": {
+        "titre": "LES DIX LEPREUX",
+        "lecon": "Leçon 25",
+        "reference": "Luc 17:11-19",
+        "versetSouligner": "Dire merci à Dieu et aux autres quand on nous fait du bien.",
+        "objectifSpecifique": "Je dis merci quand on me fait du bien.",
+        "objectifOperationnel": "Je retiens que la gratitude rend heureux et plaît à Dieu.",
+        "introduction": "Montrer un jouet ou une friandise et demander : « Si quelqu’un te donne un cadeau, que fais-tu ? » Conclure : « Il est important de dire merci, même pour les petites choses, car cela montre notre cœur reconnaissant. »",
+        "progression": [
+            "Jésus traverse la frontière entre la Samarie et la Galilée.",
+            "Dix lépreux l’aperçoivent et crient pour obtenir sa guérison.",
+            "Jésus leur dit d’aller se montrer aux prêtres.",
+            "En chemin, ils sont guéris.",
+            "Un seul revient remercier Jésus."
+        ],
+        "pointCulminant": "Seul un lépreux revient pour dire merci à Jésus.",
+        "messageTransmettre": "La gratitude est importante et agréable à Dieu.",
+        "messageCentral": "Dire merci à Dieu et aux autres pour le bien qu’ils nous font est essentiel pour une vie juste et reconnaissante.",
+        "versetRetenir": "Luc 17:18 - « Et les neuf autres, où sont-ils ? »",
+        "evaluation": [
+            "Combien de lépreux sont revenus remercier Jésus ?",
+            "Pourquoi est-il important de dire merci ?",
+            "Que se passe-t-il si nous oublions de montrer notre gratitude ?"
+        ]
+    },
+    "25 Janvier": {
+        "titre": "UN SEUL CORPS ET UN SEUL ESPRIT, UNE SEULE ESPÉRANCE",
+        "lecon": "Leçon : UN SEUL CORPS ET UN SEUL ESPRIT, UNE SEULE ESPÉRANCE",
+        "reference": "Esaïe 58:6-11, Éphésiens 4:1-13, Jean 12:31-36",
+        "versetSouligner": "Chaque chrétien doit traiter les autres comme un frère ou une sœur.",
+        "objectifSpecifique": "Je traite chaque chrétien comme mon frère.",
+        "objectifOperationnel": "Je retiens que l’unité et l’amour entre chrétiens plaisent à Dieu.",
+        "introduction": "Montrer des briques ou des pièces de puzzle et demander : « Que se passerait-il si chaque pièce ne s’assemblait pas ? » Conclure : « Comme dans un puzzle, chaque chrétien a sa place et doit agir avec amour pour l’unité. »",
+        "progression": [
+            "Les chrétiens doivent être unis dans le corps de Christ.",
+            "L’amour et le pardon maintiennent l’unité.",
+            "Chaque croyant a des dons pour servir les autres.",
+            "L’Église est forte quand tous travaillent ensemble pour Dieu."
+        ],
+        "pointCulminant": "L’unité et l’amour sont le signe de l’Église véritable.",
+        "messageTransmettre": "Dieu aime quand ses enfants s’aiment et s’entraident.",
+        "messageCentral": "Traiter chaque chrétien comme son frère ou sa sœur contribue à l’unité et à la gloire de Dieu.",
+        "versetRetenir": "Éphésiens 4:3 - « Efforcez-vous de conserver l’unité de l’Esprit par le lien de la paix. »",
+        "evaluation": [
+            "Que signifie être un seul corps et un seul esprit ?",
+            "Comment pouvons-nous montrer l’amour aux autres chrétiens ?",
+            "Pourquoi l’unité est-elle importante dans l’Église ?"
+        ]
+    },
+    "01 Février": {
+        "titre": "RÉVISION / ÉVALUATION / PROGRAMME LOCAL",
+        "lecon": "",
+        "reference": "—",
+        "versetSouligner": "Revoir les leçons permet de mieux comprendre et pratiquer la parole de Dieu.",
+        "objectifSpecifique": "Faire la révision des leçons passées et un devoir si possible.",
+        "objectifOperationnel": "Je retiens les leçons précédentes pour mieux les mettre en pratique dans ma vie.",
+        "introduction": "Poser des questions sur les leçons passées et encourager les enfants à raconter ce qu’ils ont retenu. Conclure : « Réviser nous aide à grandir dans la foi et à appliquer la parole de Dieu. »",
+        "progression": [
+            "Rappel des thèmes déjà étudiés.",
+            "Discussion sur les histoires et leurs enseignements.",
+            "Échanges sur les applications dans la vie quotidienne."
+        ],
+        "pointCulminant": "Les enfants expliquent une leçon qui les a marqués et ce qu’ils ont retenu.",
+        "messageTransmettre": "Revoir et méditer la parole de Dieu renforce notre foi.",
+        "messageCentral": "Réviser les leçons précédentes nous aide à mieux vivre selon les enseignements de Dieu.",
+        "versetRetenir": "Josué 1:8 - « Méditer ce livre de la loi jour et nuit… »",
+        "evaluation": [
+            "Quelle leçon te souviens-tu le mieux ?",
+            "Pourquoi est-il important de revoir les leçons ?",
+            "Comment appliquer ce que tu as appris ?"
+        ]
+    },
+    "08 Février": {
+        "titre": "L’EGLISE METHODISTE DE CÔTE D’IVOIRE",
+        "lecon": "Leçon 5",
+        "reference": "—",
+        "versetSouligner": "Connaître et partager l’histoire de son église aide à mieux servir Dieu.",
+        "objectifSpecifique": "J’explique à mes amis ce qu’est mon église.",
+        "objectifOperationnel": "Je retiens l’histoire et la mission de l’église méthodiste.",
+        "introduction": "Montrer des images ou objets représentant l’église. Poser la question : « Que sais-tu de ton église ? » Conclure : « Connaître notre église nous aide à participer et à grandir dans la foi. »",
+        "progression": [
+            "Présentation de l’église méthodiste en Côte d’Ivoire.",
+            "Son histoire et ses missions.",
+            "Les activités et services pour la communauté.",
+            "Importance de la participation des enfants et jeunes."
+        ],
+        "pointCulminant": "Les enfants racontent ce qu’ils aiment dans leur église.",
+        "messageTransmettre": "Connaître son église et ses missions permet de mieux servir Dieu.",
+        "messageCentral": "Apprendre et partager l’histoire de son église renforce notre engagement et notre amour pour Dieu.",
+        "versetRetenir": "Hébreux 10:25 - « N’abandonnons pas notre assemblée… »",
+        "evaluation": [
+            "Que représente l’église méthodiste pour toi ?",
+            "Comment peux-tu aider dans ton église ?",
+            "Pourquoi est-il important de connaître l’histoire de son église ?"
+        ]
+    },
+    "15 Février": {
+        "titre": "L’APPEL DE MATTHIEU",
+        "lecon": "Leçon 6",
+        "reference": "Matthieu 9:9-14",
+        "versetSouligner": "Jésus appelle chacun à le suivre et à servir les autres.",
+        "objectifSpecifique": "Pêcheur, je viens à Jésus et me mets à son service.",
+        "objectifOperationnel": "Je retiens que répondre à l’appel de Jésus transforme notre vie.",
+        "introduction": "Montrer une canne à pêche ou un filet et demander : « Si Jésus t’appelait à le suivre, que ferais-tu ? » Conclure : « Comme Matthieu, nous devons répondre à l’appel de Jésus et le servir. »",
+        "progression": [
+            "Matthieu travaille comme collecteur d’impôts.",
+            "Jésus l’appelle à le suivre.",
+            "Matthieu répond immédiatement et le suit.",
+            "Il devient disciple et annonce la bonne nouvelle."
+        ],
+        "pointCulminant": "Matthieu laisse tout pour suivre Jésus et servir les autres.",
+        "messageTransmettre": "Répondre à l’appel de Jésus nous transforme et nous rend capables de faire le bien.",
+        "messageCentral": "Répondre à l’appel de Jésus nous engage à le suivre et à servir Dieu et les autres.",
+        "versetRetenir": "Matthieu 9:9 - « Suis-moi ! »",
+        "evaluation": [
+            "Qui était Matthieu avant de suivre Jésus ?",
+            "Que s’est-il passé quand il a répondu à l’appel ?",
+            "Comment pouvons-nous suivre Jésus aujourd’hui ?"
+        ]
+    },
+    "22 Février": {
+        "titre": "LA PARABOLE DES DEUX FILS",
+        "lecon": "Leçon 31",
+        "reference": "Matthieu 21:28-32",
+        "versetSouligner": "Quand on agit mal, il faut se repentir et agir bien.",
+        "objectifSpecifique": "Quand j’agis mal, je me repens et agis bien.",
+        "objectifOperationnel": "Je retiens que Dieu voit nos cœurs et nos actions et que le vrai changement vient du repentir.",
+        "introduction": "Poser une question : « Si tu dis que tu feras quelque chose mais que tu ne le fais pas, que se passe-t-il ? » Conclure : « Dieu aime quand nous faisons ce qui est juste, même après avoir mal agi. »",
+        "progression": [
+            "Un père demande à ses deux fils d’aller travailler à la vigne.",
+            "Le premier dit non mais change d’avis et y va.",
+            "Le second dit oui mais ne fait pas ce qu’il a promis.",
+            "Jésus explique que le fils qui agit est celui qui fait la volonté du père."
+        ],
+        "pointCulminant": "Le fils qui change d’avis et agit conformément à la volonté du père fait ce qui est juste.",
+        "messageTransmettre": "Le repentir et l’action correcte comptent plus que les paroles.",
+        "messageCentral": "Dieu regarde le cœur et les actions, et le vrai changement vient de l’obéissance et du repentir.",
+        "versetRetenir": "Matthieu 21:31 - « Le publicain et la prostituée vous devanceront dans le royaume de Dieu. »",
+        "evaluation": [
+            "Que fait le premier fils au début et à la fin ?",
+            "Quel fils a fait ce que son père voulait ?",
+            "Que devons-nous retenir de cette parabole ?"
+        ]
+    },
+    "01 Mars": {
+        "titre": "LES CRITIQUES",
+        "lecon": "Leçon 43",
+        "reference": "Matthieu 7:1-5",
+        "versetSouligner": "Je me juge moi-même plutôt que de juger les autres.",
+        "objectifSpecifique": "Je me juge moi-même plutôt que de juger les autres.",
+        "objectifOperationnel": "Je retiens que critiquer les autres avant de m’examiner moi-même est injuste et désagréable à Dieu.",
+        "introduction": "Montrer un miroir et demander : « Quand tu vois quelqu’un faire une erreur, que fais-tu ? » Conclure : « Avant de critiquer, regardons d’abord nos propres actions. »",
+        "progression": [
+            "Jésus explique qu’il est injuste de juger les autres sans se juger soi-même.",
+            "Il utilise l’exemple de la poutre dans son œil et la paille dans celui du voisin.",
+            "Il encourage à corriger d’abord ses propres fautes.",
+            "Dieu voit notre cœur et apprécie l’humilité et l’auto-examen."
+        ],
+        "pointCulminant": "Jésus montre que nous devons corriger nos propres défauts avant de critiquer les autres.",
+        "messageTransmettre": "L’humilité et le jugement juste sont agréables à Dieu.",
+        "messageCentral": "Se juger soi-même avant de juger les autres rend notre vie droite et conforme à la volonté de Dieu.",
+        "versetRetenir": "Matthieu 7:5 - « Enlève d’abord la poutre de ton œil, et alors tu verras pour enlever la paille de l’œil de ton frère. »",
+        "evaluation": [
+            "Que signifie se juger soi-même avant de juger les autres ?",
+            "Pourquoi est-il mauvais de critiquer les autres sans réfléchir ?",
+            "Comment pouvons-nous pratiquer l’humilité ?"
+        ]
+    },
+    "08 Mars": {
+        "titre": "RÉVISION / ÉVALUATION / PROGRAMME LOCAL",
+        "lecon": "",
+        "reference": "—",
+        "versetSouligner": "Revoir les leçons permet de mieux comprendre et pratiquer la parole de Dieu.",
+        "objectifSpecifique": "Faire la révision des leçons passées et un devoir si possible.",
+        "objectifOperationnel": "Je retiens les leçons précédentes pour mieux les mettre en pratique dans ma vie.",
+        "introduction": "Poser des questions sur les leçons passées et encourager les enfants à raconter ce qu’ils ont retenu. Conclure : « Réviser nous aide à grandir dans la foi et à appliquer la parole de Dieu. »",
+        "progression": [
+            "Rappel des thèmes déjà étudiés.",
+            "Discussion sur les histoires et leurs enseignements.",
+            "Échanges sur les applications dans la vie quotidienne."
+        ],
+        "pointCulminant": "Les enfants expliquent une leçon qui les a marqués et ce qu’ils ont retenu.",
+        "messageTransmettre": "Revoir et méditer la parole de Dieu renforce notre foi.",
+        "messageCentral": "Réviser les leçons précédentes nous aide à mieux vivre selon les enseignements de Dieu.",
+        "versetRetenir": "Josué 1:8 - « Méditer ce livre de la loi jour et nuit… »",
+        "evaluation": [
+            "Quelle leçon te souviens-tu le mieux ?",
+            "Pourquoi est-il important de revoir les leçons ?",
+            "Comment appliquer ce que tu as appris ?"
+        ]
+    },
+    "15 Mars": {
+        "titre": "ELIE ANNONCE LA SECHERESSE",
+        "lecon": "Leçon 3",
+        "reference": "1 Rois 16:29-34, 17:1-7",
+        "versetSouligner": "Quand Dieu me châtie, je me repens et reviens à Lui.",
+        "objectifSpecifique": "Quand Dieu me châtie, je me repens et je reviens à Lui.",
+        "objectifOperationnel": "Je retiens que le repentir nous rapproche de Dieu.",
+        "introduction": "Montrer un sol sec ou une plante fanée et demander : « Que ferais-tu si tout se desséchait autour de toi ? » Conclure : « Comme Élie, nous devons écouter Dieu et revenir à Lui quand nous nous éloignons. »",
+        "progression": [
+            "Le roi Achab et Israël se détournent de Dieu.",
+            "Dieu envoie Élie pour annoncer la sécheresse.",
+            "Élie obéit et avertit le peuple.",
+            "Le peuple se repent et Dieu montre sa puissance."
+        ],
+        "pointCulminant": "Élie annonce la sécheresse, et Dieu montre que l’obéissance et le repentir sont essentiels.",
+        "messageTransmettre": "Dieu veut que nous revenions à Lui quand nous péchons.",
+        "messageCentral": "Le repentir et l’obéissance à Dieu nous protègent et rapprochent de Lui.",
+        "versetRetenir": "1 Rois 17:1 - « Élie dit : Par l’ordre du Seigneur, il ne tombera ni pluie ni rosée pendant plusieurs années. »",
+        "evaluation": [
+            "Pourquoi Élie a-t-il annoncé la sécheresse ?",
+            "Que devons-nous faire quand nous péchons ?",
+            "Comment Dieu réagit-il au repentir ?"
+        ]
+    },
+    "22 Mars": {
+        "titre": "ELIE ET LES PROPHETES DE BAAL",
+        "lecon": "Leçon 7",
+        "reference": "1 Rois 18:19-40",
+        "versetSouligner": "C’est l’Éternel Dieu seul que j’adore.",
+        "objectifSpecifique": "C’est l’Éternel Dieu seul que j’adore.",
+        "objectifOperationnel": "Je retiens que Dieu est le seul vrai Dieu et qu’il mérite toute notre adoration.",
+        "introduction": "Montrer deux images : une avec un feu et une avec une lumière naturelle. Poser la question : « Qui a le vrai pouvoir, Dieu ou les idoles ? » Conclure : « Comme Élie, nous adorons seulement l’Éternel. »",
+        "progression": [
+            "Élie confronte les prophètes de Baal.",
+            "Il propose un test pour voir quel Dieu répond par le feu.",
+            "Les prophètes de Baal échouent.",
+            "Dieu répond par le feu à l’autel d’Élie.",
+            "Le peuple reconnaît que l’Éternel est le vrai Dieu."
+        ],
+        "pointCulminant": "Le feu tombe sur l’autel d’Élie, prouvant que seul Dieu est vrai.",
+        "messageTransmettre": "Dieu est tout-puissant et mérite notre adoration.",
+        "messageCentral": "Nous devons adorer seulement l’Éternel et ne jamais suivre de faux dieux.",
+        "versetRetenir": "1 Rois 18:39 - « Le peuple tomba sur son visage et dit : Le Seigneur est Dieu ! »",
+        "evaluation": [
+            "Qui étaient les prophètes de Baal ?",
+            "Que s’est-il passé quand Élie a prié Dieu ?",
+            "Pourquoi devons-nous adorer seulement l’Éternel ?"
+        ]
+    },
+    "29 Mars": {
+        "titre": "Rameaux : HOSANNA ! JESUS, FAIT SEIGNEUR ET CHRIST",
+        "lecon": "",
+        "reference": "Zacharie 9:9-12, Actes 2:29-36, Luc 19:28-38",
+        "versetSouligner": "Je reçois Jésus-Christ comme mon Seigneur et Sauveur.",
+        "objectifSpecifique": "Je reçois Jésus-Christ comme mon Seigneur et Sauveur.",
+        "objectifOperationnel": "Je retiens que Jésus est le Christ et qu’il mérite notre cœur et notre engagement.",
+        "introduction": "Montrer un rameau ou une feuille et demander : « Comment célébreriez-vous l’arrivée d’un roi ? » Conclure : « Jésus est notre Roi, et nous devons l’accueillir avec joie et adoration. »",
+        "progression": [
+            "Jésus entre à Jérusalem accueilli par la foule.",
+            "Les gens agitent des rameaux et crient : Hosanna !",
+            "Jésus entre dans le temple et bénit le peuple.",
+            "Les prophéties annoncent le Messie."
+        ],
+        "pointCulminant": "Jésus est reconnu comme Seigneur et Christ par le peuple.",
+        "messageTransmettre": "Accueillir Jésus dans notre vie et le suivre avec foi.",
+        "messageCentral": "Jésus-Christ est notre Seigneur et Sauveur ; nous devons l’honorer et le suivre.",
+        "versetRetenir": "Luc 19:38 - « Béni soit le roi qui vient au nom du Seigneur ! »",
+        "evaluation": [
+            "Comment la foule a-t-elle accueilli Jésus ?",
+            "Pourquoi Jésus est-il le Christ ?",
+            "Comment puis-je accueillir Jésus dans ma vie aujourd’hui ?"
+        ]
+    },
+    "05 Avril": {
+        "titre": "Pâques : DIEU L’A RÉUSSITE",
+        "lecon": "",
+        "reference": "Actes 6:1-3, 13:26-37, Lc 28:1-10",
+        "versetSouligner": "Je vis dans la victoire.",
+        "objectifSpecifique": "Je vis dans la victoire.",
+        "objectifOperationnel": "Je retiens que la résurrection de Jésus nous donne la victoire sur le péché et la mort.",
+        "introduction": "Montrer une image de tombeau vide et demander : « Que s’est-il passé le matin de Pâques ? » Conclure : « Jésus est ressuscité, et nous avons la victoire en Lui. »",
+        "progression": [
+            "Les femmes viennent au tombeau et le trouvent vide.",
+            "L’ange annonce que Jésus est ressuscité.",
+            "Jésus apparaît aux disciples et leur donne la paix.",
+            "La résurrection apporte la victoire et l’espérance."
+        ],
+        "pointCulminant": "Jésus ressuscite, vainqueur de la mort.",
+        "messageTransmettre": "En Jésus, nous avons la victoire sur tout.",
+        "messageCentral": "La résurrection de Jésus nous donne la victoire et l’espérance de la vie éternelle.",
+        "versetRetenir": "Luc 24:6 - « Il n’est point ici, mais il est ressuscité. »",
+        "evaluation": [
+            "Que s’est-il passé le matin de Pâques ?",
+            "Pourquoi la résurrection est-elle importante ?",
+            "Comment pouvons-nous vivre dans la victoire de Jésus ?"
+        ]
+    },
+    "12 Avril": {
+        "titre": "ELIE ANNONCE LA PLUIE",
+        "lecon": "Leçon 8",
+        "reference": "1 Rois 18:1-18, 41-46",
+        "versetSouligner": "Quand Dieu parle, je crois et j’obéis.",
+        "objectifSpecifique": "Quand Dieu parle, je crois et j’obéis.",
+        "objectifOperationnel": "Je retiens que suivre les instructions de Dieu apporte bénédiction et protection.",
+        "introduction": "Montrer une pluie ou une petite plante et demander : « Que ferais-tu si tu avais besoin de pluie pour ta plante ? » Conclure : « Comme Élie, nous devons croire et obéir à Dieu pour recevoir ses bénédictions. »",
+        "progression": [
+            "Élie prie Dieu pour la fin de la sécheresse.",
+            "Il montre sa foi et obéit aux instructions divines.",
+            "Les serviteurs observent les signes envoyés par Dieu.",
+            "La pluie revient et le peuple voit la puissance de Dieu."
+        ],
+        "pointCulminant": "La pluie tombe après que Dieu a parlé et qu’Élie a obéi.",
+        "messageTransmettre": "Dieu récompense ceux qui croient et obéissent.",
+        "messageCentral": "Croire et obéir à Dieu apporte ses bénédictions et démontre notre foi.",
+        "versetRetenir": "1 Rois 18:41 - « Monte, et regarde vers la mer. »",
+        "evaluation": [
+            "Que fait Élie pour que la pluie vienne ?",
+            "Pourquoi est-il important de croire et d’obéir à Dieu ?",
+            "Qu’est-ce que nous apprenons de cette histoire ?"
+        ]
+    },
+    "19 Avril": {
+        "titre": "WILLIAM WADE HARRIS, LE GRAND PRÉDICATEUR",
+        "lecon": "Leçon 16",
+        "reference": "—",
+        "versetSouligner": "Comme Harris, j’annonce la Parole de Dieu.",
+        "objectifSpecifique": "Comme Harris, j’annonce la Parole de Dieu.",
+        "objectifOperationnel": "Je retiens que partager la parole de Dieu est un devoir pour tout chrétien.",
+        "introduction": "Montrer une Bible ou un tract et demander : « Que ferais-tu si tu devais partager une bonne nouvelle ? » Conclure : « Comme William Wade Harris, nous devons annoncer la parole de Dieu partout où nous allons. »",
+        "progression": [
+            "Présentation de William Wade Harris et son travail missionnaire.",
+            "Il enseigne la Bible et les principes de Dieu.",
+            "Il influence et transforme la vie de nombreuses personnes.",
+            "Son exemple encourage à partager la parole de Dieu."
+        ],
+        "pointCulminant": "Harris répand la parole de Dieu et beaucoup changent leur vie.",
+        "messageTransmettre": "Nous aussi, nous pouvons partager la bonne nouvelle avec les autres.",
+        "messageCentral": "Partager la parole de Dieu est un moyen puissant de bénir et transformer la vie des autres.",
+        "versetRetenir": "Matthieu 28:19 - « Allez, faites de toutes les nations des disciples. »",
+        "evaluation": [
+            "Qui était William Wade Harris ?",
+            "Que faisait-il pour partager la parole de Dieu ?",
+            "Comment pouvons-nous suivre son exemple ?"
+        ]
+    },
+    "26 Avril": {
+        "titre": "QU’EST-CE QUE LA BIBLE ?",
+        "lecon": "",
+        "reference": "—",
+        "versetSouligner": "Je médite régulièrement la Parole de Dieu.",
+        "objectifSpecifique": "Je médite régulièrement la Parole de Dieu.",
+        "objectifOperationnel": "Je retiens que la Bible est le guide pour vivre selon la volonté de Dieu.",
+        "introduction": "Montrer une Bible et poser la question : « Que contient ce livre ? » Conclure : « La Bible nous enseigne comment vivre et être proches de Dieu. »",
+        "progression": [
+            "La Bible est la Parole de Dieu écrite pour nous guider.",
+            "Elle contient des histoires, des enseignements et des commandements.",
+            "Lire et méditer la Bible nous aide à prendre de bonnes décisions.",
+            "Appliquer les enseignements dans notre vie quotidienne."
+        ],
+        "pointCulminant": "Comprendre que la Bible nous guide et nous aide à vivre selon la volonté de Dieu.",
+        "messageTransmettre": "Lire, méditer et appliquer la parole de Dieu change notre vie.",
+        "messageCentral": "La Bible est notre guide quotidien pour aimer Dieu et faire le bien.",
+        "versetRetenir": "Psaume 119:105 - « Ta parole est une lampe à mes pieds et une lumière sur mon sentier. »",
+        "evaluation": [
+            "Pourquoi la Bible est-elle importante ?",
+            "Comment pouvons-nous l’utiliser chaque jour ?",
+            "Qu’est-ce que nous apprend la Bible sur Dieu et sur nous-mêmes ?"
+        ]
+    },
+    "03 Mai": {
+        "titre": "LA MAISON BÂTIE SUR LE ROC",
+        "lecon": "Leçon 15",
+        "reference": "Matthieu 7:24-29",
+        "versetSouligner": "Je mets la Parole de Dieu en pratique.",
+        "objectifSpecifique": "Je mets la Parole de Dieu en pratique.",
+        "objectifOperationnel": "Je retiens que suivre la parole de Dieu nous rend solides face aux difficultés.",
+        "introduction": "Montrer un petit modèle de maison solide et fragile et demander : « Quelle maison résistera à la pluie et au vent ? » Conclure : « Comme cette maison, notre vie doit être bâtie sur la parole de Dieu pour être forte. »",
+        "progression": [
+            "Jésus explique l’importance d’écouter et de pratiquer sa parole.",
+            "Exemple de l’homme sage qui construit sur le roc.",
+            "Exemple de l’homme insensé qui construit sur le sable.",
+            "Les tempêtes viennent, seul celui qui suit la parole de Dieu reste ferme."
+        ],
+        "pointCulminant": "L’homme sage reste ferme malgré les tempêtes grâce à sa fondation sur la parole de Dieu.",
+        "messageTransmettre": "Mettre la parole de Dieu en pratique nous protège et nous rend solides.",
+        "messageCentral": "Construire sa vie sur la parole de Dieu nous rend stables et confiants.",
+        "versetRetenir": "Matthieu 7:24 - « Celui qui écoute ces paroles de moi et les met en pratique est comme un homme prudent qui a bâti sa maison sur le roc. »",
+        "evaluation": [
+            "Quelle est la différence entre l’homme sage et l’homme insensé ?",
+            "Pourquoi est-il important de mettre la parole de Dieu en pratique ?",
+            "Comment pouvons-nous construire notre vie sur le roc ?"
+        ]
+    },
+    "10 Mai": {
+        "titre": "LA VIGNE DE NABOTH",
+        "lecon": "Leçon 9",
+        "reference": "1 Rois 21:1-24",
+        "versetSouligner": "La convoitise pousse au péché.",
+        "objectifSpecifique": "Je me contente de ce que j’ai pour éviter de pécher.",
+        "objectifOperationnel": "Je retiens que vouloir ce qui appartient aux autres nous pousse à agir mal.",
+        "introduction": "Montrer un objet attirant et demander : « Si cet objet appartenait à ton camarade et il refuse de te donner, que ferais-tu ? » Conclure : « Un homme qui prend ce qui ne lui appartient pas s’attire de graves problèmes avec Dieu. »",
+        "progression": [
+            "Le roi Achab désire la vigne de Naboth.",
+            "Achab propose d’acheter ou d’échanger la vigne.",
+            "Naboth refuse de vendre l’héritage de ses pères.",
+            "Achab devient triste et se met en colère.",
+            "Jézabel décide d’aider Achab par un plan mauvais.",
+            "De faux témoins accusent Naboth.",
+            "Naboth est condamné et mis à mort.",
+            "Achab s’empare de la vigne.",
+            "Dieu envoie le prophète Élie pour confronter Achab."
+        ],
+        "pointCulminant": "Dieu envoie Élie pour annoncer le jugement de Dieu contre Achab.",
+        "messageTransmettre": "Dieu voit tout, même ce qui est fait en secret, et il juge l’injustice.",
+        "messageCentral": "Dieu n’aime pas la convoitise, le mensonge et l’injustice. Il punit le mal et bénit ceux qui font le bien.",
+        "versetRetenir": "Exode 20:17a - « Tu ne convoiteras pas… »",
+        "evaluation": [
+            "Pourquoi Naboth a-t-il refusé de vendre sa vigne ?",
+            "Quel péché Achab et Jézabel ont-ils commis ?",
+            "Que fait Dieu quand quelqu’un fait le mal ?"
+        ]
+    },
+    "14 Mai": {
+        "titre": "Ascension : ENLEVÉ AU CIEL",
+        "lecon": "",
+        "reference": "Psaume 110:1-7, Actes 1:9-11, Marc 16:19",
+        "versetSouligner": "Je suis confiant car Christ prend soin de moi.",
+        "objectifSpecifique": "Je suis confiant car Christ prend soin de moi.",
+        "objectifOperationnel": "Je retiens que Jésus est vivant et veille sur chacun de nous.",
+        "introduction": "Montrer une image du ciel et demander : « Où est allé Jésus après sa résurrection ? » Conclure : « Même si nous ne le voyons pas, Jésus prend soin de nous. »",
+        "progression": [
+            "Jésus enseigne ses disciples pendant 40 jours après sa résurrection.",
+            "Il leur promet le Saint-Esprit et la paix.",
+            "Jésus monte au ciel devant leurs yeux.",
+            "Les disciples se réjouissent et prient avec foi."
+        ],
+        "pointCulminant": "Jésus est enlevé au ciel et les disciples comprennent qu’il veille sur eux.",
+        "messageTransmettre": "Nous pouvons avoir confiance en Jésus, même s’il n’est pas visible.",
+        "messageCentral": "Jésus est vivant au ciel et veille sur nous ; nous pouvons avoir confiance en lui.",
+        "versetRetenir": "Actes 1:11 - « Cet homme qui a été enlevé au ciel reviendra de la même manière. »",
+        "evaluation": [
+            "Que s’est-il passé lors de l’Ascension de Jésus ?",
+            "Pourquoi pouvons-nous avoir confiance en Jésus ?",
+            "Comment pouvons-nous suivre son exemple aujourd’hui ?"
+        ]
+    },
+    "17 Mai": {
+        "titre": "LA MORT D’ACHAB",
+        "lecon": "Leçon 10",
+        "reference": "1 Rois 22:1-38",
+        "versetSouligner": "J’écoute les conseils pour y obéir afin de vivre comme Dieu le veut.",
+        "objectifSpecifique": "J’écoute les conseils pour y obéir afin de vivre comme Dieu le veut.",
+        "objectifOperationnel": "Je retiens que suivre les conseils justes nous protège et nous guide vers le bien.",
+        "introduction": "Poser une question : « Que se passe-t-il si on ignore les conseils sages ? » Conclure : « Comme Achab, ignorer les conseils peut avoir de graves conséquences. »",
+        "progression": [
+            "Achab consulte ses conseillers sur la guerre.",
+            "Certains lui donnent de mauvais conseils.",
+            "Il choisit de ne pas suivre les instructions de Dieu.",
+            "Achab est tué dans la bataille."
+        ],
+        "pointCulminant": "Achab meurt à cause de sa désobéissance et de ses mauvais choix.",
+        "messageTransmettre": "Écouter et suivre les conseils justes nous aide à vivre selon Dieu.",
+        "messageCentral": "Suivre les conseils sages et conformes à la volonté de Dieu nous protège et nous guide.",
+        "versetRetenir": "1 Rois 22:29 - « Les rois écoutent et obéissent aux bons conseils. »",
+        "evaluation": [
+            "Pourquoi Achab est-il mort ?",
+            "Que pouvons-nous apprendre de cette histoire ?",
+            "Comment décider si un conseil est bon ?"
+        ]
+    },
+    "24 Mai": {
+        "titre": "REMPLI DU SAINT-ESPRIT",
+        "lecon": "",
+        "reference": "Joël 2:28-32, Actes 2:1-17, Luc 10:1-17",
+        "versetSouligner": "Je vis ma vie remplie du Saint-Esprit.",
+        "objectifSpecifique": "Je vis ma vie remplie du Saint-Esprit.",
+        "objectifOperationnel": "Je retiens que le Saint-Esprit nous guide et nous fortifie pour faire le bien.",
+        "introduction": "Montrer une image de flamme ou une colombe et demander : « Que symbolise le Saint-Esprit ? » Conclure : « Être rempli du Saint-Esprit nous aide à vivre selon Dieu et à servir les autres. »",
+        "progression": [
+            "Jésus promet le Saint-Esprit à ses disciples.",
+            "Le jour de la Pentecôte, ils sont remplis de l’Esprit et parlent en langues.",
+            "Ils prêchent avec puissance et guérissent.",
+            "Tous sont témoins de la puissance de Dieu à travers eux."
+        ],
+        "pointCulminant": "Les disciples sont remplis de l’Esprit et accomplissent de grandes œuvres pour Dieu.",
+        "messageTransmettre": "Le Saint-Esprit nous rend capables de faire le bien et de témoigner de Dieu.",
+        "messageCentral": "Vivre rempli du Saint-Esprit nous rend forts pour suivre et servir Dieu.",
+        "versetRetenir": "Actes 2:4 - « Et ils furent tous remplis du Saint-Esprit. »",
+        "evaluation": [
+            "Que fait le Saint-Esprit dans notre vie ?",
+            "Comment pouvons-nous être remplis du Saint-Esprit ?",
+            "Pourquoi est-il important d’être guidé par l’Esprit ?"
+        ]
+    },
+    "31 Mai": {
+        "titre": "LA REINE ÉCARTÉE DU TRÔNE",
+        "lecon": "Leçon 18",
+        "reference": "Esther 1:1-22",
+        "versetSouligner": "Je suis un enfant humble et respectueux.",
+        "objectifSpecifique": "Je suis un enfant humble et respectueux.",
+        "objectifOperationnel": "Je retiens que l’humilité et le respect protègent et rendent agréable aux yeux de Dieu.",
+        "introduction": "Montrer une image d’un roi ou d’une reine et demander : « Comment un enfant doit-il se comporter devant des personnes importantes ? » Conclure : « L’humilité et le respect sont toujours importants, quelle que soit la situation. »",
+        "progression": [
+            "La reine est écartée du trône à cause de son comportement.",
+            "Les événements conduisent à un choix juste pour le royaume.",
+            "Esther montre l’exemple du respect et de la prudence.",
+            "Les enfants apprennent à être humbles et respectueux."
+        ],
+        "pointCulminant": "Le comportement humble et respectueux d’Esther conduit à la protection du peuple.",
+        "messageTransmettre": "L’humilité et le respect sont essentiels et agréables à Dieu.",
+        "messageCentral": "Être humble et respectueux protège et plaît à Dieu.",
+        "versetRetenir": "Esther 1:20 - « L’humilité et la sagesse honorent devant Dieu. »",
+        "evaluation": [
+            "Pourquoi la reine a-t-elle été écartée ?",
+            "Que devons-nous apprendre de l’histoire d’Esther ?",
+            "Comment montrer l’humilité et le respect dans notre vie ?"
+        ]
+    },
+    "07 Juin": {
+        "titre": "ELIE ENLEVÉ AU CIEL",
+        "lecon": "Leçon 11",
+        "reference": "2 Rois 2:1-18",
+        "versetSouligner": "Je persévère dans la prière sans me décourager.",
+        "objectifSpecifique": "Je persévère dans la prière sans me décourager.",
+        "objectifOperationnel": "Je retiens que la persévérance dans la prière attire la bénédiction et la puissance de Dieu.",
+        "introduction": "Montrer une image d’ascension et demander : « Que ferais-tu si tu voulais demander quelque chose à Dieu sans abandonner ? » Conclure : « Comme Élie, persévérer dans la prière nous rapproche de Dieu et manifeste sa puissance. »",
+        "progression": [
+            "Élie et Élisée marchent ensemble vers Béthel et Jéricho.",
+            "Élie est sur le point d’être enlevé au ciel.",
+            "Il demande à Élisée ce qu’il désire recevoir de Dieu.",
+            "Élie est enlevé dans un tourbillon et Élisée reçoit une double part de son esprit."
+        ],
+        "pointCulminant": "Élie est enlevé au ciel et Élisée reçoit l’esprit d’Élie.",
+        "messageTransmettre": "La persévérance dans la prière et la foi conduit à des bénédictions.",
+        "messageCentral": "Persévérer dans la prière sans se décourager nous rapproche de Dieu et attire sa puissance.",
+        "versetRetenir": "2 Rois 2:11 - « Et, comme ils continuaient à marcher et à parler, un char de feu et des chevaux de feu les séparèrent l’un de l’autre, et Élie monta au ciel dans un tourbillon. »",
+        "evaluation": [
+            "Que s’est-il passé avec Élie ?",
+            "Pourquoi Élisée a-t-il reçu une double part de l’esprit d’Élie ?",
+            "Que devons-nous apprendre de la persévérance dans la prière ?"
+        ]
+    },
+    "14 Juin": {
+        "titre": "ELIE ET LA VEUVE DE SAREPTA",
+        "lecon": "Leçon 23",
+        "reference": "1 Rois 17:7-24",
+        "versetSouligner": "Je soutiens veuves et orphelins, et envoie les 30% au Comité Social et Médical.",
+        "objectifSpecifique": "Je soutiens veuves et orphelins, et participe aux œuvres de l’église.",
+        "objectifOperationnel": "Je retiens que partager et aider les nécessiteux plaît à Dieu.",
+        "introduction": "Montrer une image de veuve et demander : « Comment pouvons-nous aider ceux qui ont besoin ? » Conclure : « Comme la veuve de Sarepta, nous devons partager et soutenir les autres avec foi. »",
+        "progression": [
+            "Élie rencontre la veuve de Sarepta et lui demande de partager son peu de nourriture.",
+            "Elle obéit malgré sa pauvreté.",
+            "La farine et l’huile ne manquent pas grâce à la bénédiction de Dieu.",
+            "Élie ressuscite son fils malade, montrant la puissance de Dieu."
+        ],
+        "pointCulminant": "La veuve partage et Dieu la bénit avec abondance.",
+        "messageTransmettre": "Dieu bénit ceux qui aident et obéissent.",
+        "messageCentral": "Partager et soutenir les nécessiteux plaît à Dieu et reçoit sa bénédiction.",
+        "versetRetenir": "1 Rois 17:16 - « La farine et l’huile ne manquèrent point selon la parole de l’Éternel. »",
+        "evaluation": [
+            "Pourquoi la veuve a-t-elle été bénie ?",
+            "Que devons-nous apprendre de cette histoire ?",
+            "Comment pouvons-nous aider ceux qui sont dans le besoin ?"
+        ]
+    },
+    "21 Juin": {
+        "titre": "NAAMAN, LE SYRIEN",
+        "lecon": "Leçon 22",
+        "reference": "2 Rois 5:1-27",
+        "versetSouligner": "Je suis reconnaissant envers ceux qui me font du bien.",
+        "objectifSpecifique": "Je suis reconnaissant envers ceux qui me font du bien.",
+        "objectifOperationnel": "Je retiens que la gratitude envers les autres et Dieu rend heureux et agréable.",
+        "introduction": "Poser une question : « Si quelqu’un t’aide quand tu es malade, que fais-tu ? » Conclure : « Comme Naaman, nous devons dire merci et montrer notre reconnaissance. »",
+        "progression": [
+            "Naaman est un grand général mais malade de la lèpre.",
+            "Une jeune servante lui parle du prophète Élisée.",
+            "Naaman se rend à Élisée et suit ses instructions pour se laver dans le Jourdain.",
+            "Il est guéri et remercie Dieu et Élisée."
+        ],
+        "pointCulminant": "Naaman est guéri après avoir obéi et montre sa gratitude.",
+        "messageTransmettre": "La gratitude et l’obéissance à Dieu et aux autres apportent des bénédictions.",
+        "messageCentral": "Être reconnaissant envers ceux qui nous aident et envers Dieu est un signe de cœur juste.",
+        "versetRetenir": "2 Rois 5:15 - « Il retourna vers l’homme de Dieu, lui dit : Maintenant je sais qu’il n’y a point d’autre Dieu que dans tout Israël. »",
+        "evaluation": [
+            "Comment Naaman a-t-il été guéri ?",
+            "Pourquoi est-il important d’être reconnaissant ?",
+            "Que pouvons-nous apprendre sur Dieu dans cette histoire ?"
+        ]
+    },
+    "28 Juin": {
+        "titre": "LES SYRIENS FRAPPÉS D’AVEUGLEMENT",
+        "lecon": "Leçon 24",
+        "reference": "2 Rois 6:8-23",
+        "versetSouligner": "Je mets ma confiance en l’Éternel, mon protecteur.",
+        "objectifSpecifique": "Je mets ma confiance en l’Éternel, mon protecteur.",
+        "objectifOperationnel": "Je retiens que Dieu protège ceux qui lui font confiance.",
+        "introduction": "Poser la question : « Si tu étais attaqué, à qui ferais-tu confiance pour te protéger ? » Conclure : « Comme l’Éternel protège ses serviteurs, nous devons avoir confiance en Lui. »",
+        "progression": [
+            "Les Syriens préparent une embuscade contre Israël.",
+            "Le serviteur d’Élisée s’inquiète.",
+            "Élisée prie et Dieu ouvre les yeux de son serviteur pour voir l’armée céleste.",
+            "Les Syriens sont frappés d’aveuglement et sont conduits sans danger."
+        ],
+        "pointCulminant": "Dieu ouvre les yeux pour protéger et guider ses serviteurs.",
+        "messageTransmettre": "Dieu est notre protecteur quand nous lui faisons confiance.",
+        "messageCentral": "Mettre sa confiance en Dieu nous protège et nous guide dans les situations difficiles.",
+        "versetRetenir": "2 Rois 6:16 - « Ne crains point, car ceux qui sont avec nous sont plus nombreux que ceux qui sont avec eux. »",
+        "evaluation": [
+            "Que s’est-il passé avec les Syriens ?",
+            "Comment Élisée et son serviteur ont-ils été protégés ?",
+            "Que devons-nous apprendre sur la confiance en Dieu ?"
+        ]
+    },
+    "29 Juin": {
+        "titre": "LES SYRIENS FRAPPÉS D’AVEUGLEMENT",
+        "lecon": "Leçon 24",
+        "reference": "3 Rois 6:8-23",
+        "versetSouligner": "Je prie pour me libérer de tous les liens maléfiques.",
+        "objectifSpecifique": "Je prie pour me libérer de tous les liens maléfiques.",
+        "objectifOperationnel": "Je retiens que la prière et la confiance en Dieu brisent toutes les chaînes.",
+        "introduction": "Poser la question : « Comment réagir quand on se sent prisonnier d’une situation ? » Conclure : « Comme Élisée, prions et Dieu nous délivrera. »",
+        "progression": [
+            "Les Syriens encerclent la ville pour capturer Élisée.",
+            "Le serviteur est effrayé.",
+            "Élisée prie et Dieu ouvre les yeux du serviteur.",
+            "Les Syriens sont frappés d’aveuglement et conduits sans danger."
+        ],
+        "pointCulminant": "La prière d’Élisée libère et protège.",
+        "messageTransmettre": "Dieu entend nos prières et nous libère de tous les liens.",
+        "messageCentral": "La prière et la confiance en Dieu nous libèrent de toutes les chaînes et nous protègent.",
+        "versetRetenir": "2 Rois 6:17 - « Éternel, ouvre ses yeux, pour qu’il voie. »",
+        "evaluation": [
+            "Pourquoi Élisée a-t-il prié ?",
+            "Qu’a vu le serviteur ?",
+            "Comment la prière peut-elle nous libérer ?"
+        ]
+    },
+    "05 Juillet": {
+        "titre": "RÉVISION / ÉVALUATION / PROGRAMME LOCAL",
+        "lecon": "Leçon 4",
+        "reference": "—",
+        "versetSouligner": "Revoir les leçons permet de mieux comprendre et pratiquer la parole de Dieu.",
+        "objectifSpecifique": "Faire la révision des leçons passées et un devoir si possible.",
+        "objectifOperationnel": "Je retiens les leçons précédentes pour mieux les mettre en pratique dans ma vie.",
+        "introduction": "Poser des questions sur les leçons passées et encourager les enfants à raconter ce qu’ils ont retenu. Conclure : « Réviser nous aide à grandir dans la foi et à appliquer la parole de Dieu. »",
+        "progression": [
+            "Rappel des thèmes déjà étudiés.",
+            "Discussion sur les histoires et leurs enseignements.",
+            "Échanges sur les applications dans la vie quotidienne."
+        ],
+        "pointCulminant": "Les enfants expliquent une leçon qui les a marqués et ce qu’ils ont retenu.",
+        "messageTransmettre": "Revoir et méditer la parole de Dieu renforce notre foi.",
+        "messageCentral": "Réviser les leçons précédentes nous aide à mieux vivre selon les enseignements de Dieu.",
+        "versetRetenir": "Josué 1:8 - « Méditer ce livre de la loi jour et nuit… »",
+        "evaluation": [
+            "Quelle leçon te souviens-tu le mieux ?",
+            "Pourquoi est-il important de revoir les leçons ?",
+            "Comment appliquer ce que tu as appris ?"
+        ]
+    },
+    "12 Juillet": {
+        "titre": "ELISEE ET LA SUNAMITE",
+        "lecon": "Leçon 20",
+        "reference": "2 Rois 4:8-37",
+        "versetSouligner": "Je suis gentil avec tout le monde.",
+        "objectifSpecifique": "Je suis gentil avec tout le monde.",
+        "objectifOperationnel": "Je retiens que la gentillesse et le service aux autres plaisent à Dieu.",
+        "introduction": "Montrer une image de maison et demander : « Comment réagirais-tu si quelqu’un t’accueillait avec bonté ? » Conclure : « Comme la Sunamite, être gentil attire la bénédiction de Dieu. »",
+        "progression": [
+            "Élisée rend visite à la Sunamite et reconnaît sa gentillesse.",
+            "Il promet un fils à la femme stérile.",
+            "Le fils meurt, mais Élisée le ressuscite par la foi et la prière.",
+            "L’histoire montre la récompense de la gentillesse et de l’hospitalité."
+        ],
+        "pointCulminant": "Le fils de la Sunamite est ressuscité grâce à la bonté et la foi.",
+        "messageTransmettre": "La gentillesse et le service aux autres sont précieux aux yeux de Dieu.",
+        "messageCentral": "Être gentil et serviable attire la bénédiction et l’amour de Dieu.",
+        "versetRetenir": "2 Rois 4:9 - « Elle lui avait fait une petite chambre sur le toit et un lit pour qu’il y dorme. »",
+        "evaluation": [
+            "Comment la Sunamite a-t-elle été gentille ?",
+            "Que s’est-il passé grâce à sa gentillesse ?",
+            "Comment pouvons-nous être gentils dans notre vie ?"
+        ]
+    },
+    "19 Juillet": {
+        "titre": "LA CLASSE METHODISTE",
+        "lecon": "Leçon 26",
+        "reference": "—",
+        "versetSouligner": "Je prends part à ma classe méthodiste et contribue à la vie de l’église.",
+        "objectifSpecifique": "Je prends part à ma classe méthodiste et contribue à la vie de l’église.",
+        "objectifOperationnel": "Je retiens que participer activement à l’école du dimanche et à l’église est une manière de servir Dieu.",
+        "introduction": "Poser la question : « Pourquoi venir à l’école du dimanche est important ? » Conclure : « Participer à la classe méthodiste nous aide à grandir dans la foi et à servir les autres. »",
+        "progression": [
+            "Présentation de la classe méthodiste et ses activités.",
+            "Importance de participer et d’apprendre la parole de Dieu.",
+            "Les enfants et enseignants travaillent ensemble pour servir Dieu.",
+            "Les contributions individuelles enrichissent la vie de l’église."
+        ],
+        "pointCulminant": "La participation active des enfants et jeunes renforce la classe et l’église.",
+        "messageTransmettre": "Chaque membre a un rôle dans la vie de l’église.",
+        "messageCentral": "Participer à sa classe méthodiste et à la vie de l’église est un moyen de servir Dieu.",
+        "versetRetenir": "Hébreux 10:25 - « N’abandonnons pas notre assemblée… »",
+        "evaluation": [
+            "Pourquoi est-il important de participer à la classe méthodiste ?",
+            "Comment chacun peut-il contribuer à la vie de l’église ?",
+            "Que gagnons-nous à être actifs dans l’école du dimanche ?"
+        ]
+    },
+    "26 Juillet": {
+        "titre": "LA TÉLÉVISION METHODISTE",
+        "lecon": "Leçon 27",
+        "reference": "2 Timothée 4:2",
+        "versetSouligner": "Je suis Espérance TV et je soutiens par mes dons et mes prières.",
+        "objectifSpecifique": "Je soutiens Espérance TV par mes dons et mes prières.",
+        "objectifOperationnel": "Je retiens que soutenir les médias chrétiens contribue à l’annonce de la parole de Dieu.",
+        "introduction": "Montrer une image ou une courte vidéo d’Espérance TV et demander : « Pourquoi aider la télévision de l’église est important ? » Conclure : « En soutenant Espérance TV, nous aidons à partager la parole de Dieu partout. »",
+        "progression": [
+            "Présentation d’Espérance TV et de ses programmes.",
+            "Les enfants et familles peuvent soutenir par la prière et les dons.",
+            "L’importance de partager la parole de Dieu via les médias.",
+            "Les bénédictions de soutenir l’église dans ses œuvres."
+        ],
+        "pointCulminant": "Les enfants comprennent que leur participation permet à la parole de Dieu d’être diffusée.",
+        "messageTransmettre": "Soutenir les médias chrétiens est une manière de servir et d’annoncer la parole de Dieu.",
+        "messageCentral": "Contribuer à Espérance TV par prières et dons aide à partager la parole de Dieu.",
+        "versetRetenir": "2 Timothée 4:2 - « Prêche la parole, insiste en toute occasion. »",
+        "evaluation": [
+            "Pourquoi est-il important de soutenir Espérance TV ?",
+            "Comment pouvons-nous contribuer à la diffusion de la parole de Dieu ?",
+            "Que gagnons-nous à participer activement ?"
+        ]
+    },
+    "02 Août": {
+        "titre": "L’ENFANT ET LA CHORALE / LES INSTRUMENTS DE MUSIQUE POUR LOUER DIEU",
+        "lecon": "Leçon 28",
+        "reference": "Psaume 150:1-6",
+        "versetSouligner": "Je loue Dieu avec amour et des instruments de musique.",
+        "objectifSpecifique": "Je loue Dieu avec des chants et instruments.",
+        "objectifOperationnel": "Je retiens que la louange est une manière d’adorer Dieu et de lui montrer notre amour.",
+        "introduction": "Montrer un instrument de musique ou chanter un court refrain et demander : « Comment pouvons-nous louer Dieu ? » Conclure : « La louange avec amour et instruments réjouit le cœur de Dieu. »",
+        "progression": [
+            "Présenter différents instruments et leur utilisation dans la louange.",
+            "Les enfants apprennent des chants simples pour adorer Dieu.",
+            "Encourager à chanter et jouer avec joie et cœur pur.",
+            "La louange rassemble et glorifie Dieu."
+        ],
+        "pointCulminant": "Les enfants louent Dieu ensemble avec instruments et chants.",
+        "messageTransmettre": "Louer Dieu avec cœur et instruments est un acte de foi et d’amour.",
+        "messageCentral": "La louange avec amour et instruments glorifie Dieu et réjouit le cœur.",
+        "versetRetenir": "Psaume 150:6 - « Que tout ce qui respire loue l’Éternel ! »",
+        "evaluation": [
+            "Comment pouvons-nous louer Dieu ?",
+            "Pourquoi est-il important de louer avec instruments ?",
+            "Que ressentons-nous quand nous louons Dieu ?"
+        ]
+    },
+    "02 Août (3)": {
+        "titre": "LES INSTRUMENTS DE MUSIQUE POUR LOUER DIEU",
+        "lecon": "Leçon 28",
+        "reference": "Psaume 150:1-6",
+        "versetSouligner": "Je loue Dieu avec des instruments de musique.",
+        "objectifSpecifique": "Je loue Dieu avec des instruments de musique.",
+        "objectifOperationnel": "Je retiens que chaque instrument peut servir à glorifier Dieu.",
+        "introduction": "Montrer différents instruments et demander : « Comment ces instruments peuvent-ils louer Dieu ? » Conclure : « Tous les instruments peuvent être utilisés pour glorifier Dieu. »",
+        "progression": [
+            "Présentation des différents instruments mentionnés dans le Psaume 150.",
+            "Chaque instrument a sa place dans la louange.",
+            "Les enfants peuvent apprendre à jouer pour Dieu.",
+            "La louange avec instruments rassemble et élève le cœur."
+        ],
+        "pointCulminant": "Tous les instruments louent Dieu ensemble.",
+        "messageTransmettre": "Dieu aime quand nous le louons avec joie et avec nos talents.",
+        "messageCentral": "Utiliser des instruments pour louer Dieu est une manière de lui offrir notre meilleur.",
+        "versetRetenir": "Psaume 150:3-5 - « Louez-le avec la trompette, avec le luth et la harpe… »",
+        "evaluation": [
+            "Quels instruments peut-on utiliser pour louer Dieu ?",
+            "Pourquoi la musique est-elle importante dans la louange ?",
+            "Comment pouvons-nous utiliser nos talents pour Dieu ?"
+        ]
+    },
+    "09 Août": {
+        "titre": "LES DIX LEPREUX",
+        "lecon": "Leçon 25",
+        "reference": "Luc 17:11-19",
+        "versetSouligner": "Dire merci à Dieu et aux autres quand on nous fait du bien.",
+        "objectifSpecifique": "Je dis merci quand on me fait du bien.",
+        "objectifOperationnel": "Je retiens que la gratitude rend heureux et plaît à Dieu.",
+        "introduction": "Montrer un jouet ou une friandise et demander : « Si quelqu’un te donne un cadeau, que fais-tu ? » Conclure : « Il est important de dire merci, même pour les petites choses, car cela montre notre cœur reconnaissant. »",
+        "progression": [
+            "Jésus traverse la frontière entre la Samarie et la Galilée.",
+            "Dix lépreux l’aperçoivent et crient pour obtenir sa guérison.",
+            "Jésus leur dit d’aller se montrer aux prêtres.",
+            "En chemin, ils sont guéris.",
+            "Un seul revient remercier Jésus."
+        ],
+        "pointCulminant": "Seul un lépreux revient pour dire merci à Jésus.",
+        "messageTransmettre": "La gratitude est importante et agréable à Dieu.",
+        "messageCentral": "Dire merci à Dieu et aux autres pour le bien qu’ils nous font est essentiel pour une vie juste et reconnaissante.",
+        "versetRetenir": "Luc 17:18 - « Et les neuf autres, où sont-ils ? »",
+        "evaluation": [
+            "Combien de lépreux sont revenus remercier Jésus ?",
+            "Pourquoi est-il important de dire merci ?",
+            "Que se passe-t-il si nous oublions de montrer notre gratitude ?"
+        ]
+    },
+    "16 Août": {
+        "titre": "LA PÊCHE MIRACULEUSE",
+        "lecon": "Leçon 30",
+        "reference": "Luc 5:1-11",
+        "versetSouligner": "Je suis un pêcheur d’hommes et parle de Jésus à mes amis.",
+        "objectifSpecifique": "Je suis un pêcheur d’hommes et parle de Jésus à mes amis.",
+        "objectifOperationnel": "Je retiens que partager Jésus avec les autres est une mission importante.",
+        "introduction": "Montrer une canne à pêche ou un filet et demander : « Que ferais-tu si tu voulais aider ton ami à connaître Jésus ? » Conclure : « Comme les disciples, nous devons inviter les autres à connaître Jésus. »",
+        "progression": [
+            "Jésus rencontre les pêcheurs au bord du lac.",
+            "Il leur dit de jeter leurs filets, même si la pêche semble impossible.",
+            "Ils attrapent une grande quantité de poissons.",
+            "Jésus les appelle à le suivre et à devenir pêcheurs d’hommes."
+        ],
+        "pointCulminant": "La pêche miraculeuse montre la puissance de Jésus et son appel à ses disciples.",
+        "messageTransmettre": "Suivre Jésus et partager son message apporte des bénédictions.",
+        "messageCentral": "Partager Jésus avec les autres est un acte de foi et d’obéissance.",
+        "versetRetenir": "Luc 5:10 - « Ne craignez point ; désormais ce sont des hommes que vous prendrez. »",
+        "evaluation": [
+            "Que s’est-il passé lors de la pêche miraculeuse ?",
+            "Que signifie être pêcheur d’hommes ?",
+            "Comment pouvons-nous partager Jésus avec nos amis ?"
+        ]
+    },
+    "23 Août": {
+        "titre": "LES DOUZE ESPIONS",
+        "lecon": "Leçon 29",
+        "reference": "Nombres 13:1-33, 14:1-30",
+        "versetSouligner": "Je suis confiant car Dieu est assez puissant pour prendre soin de moi.",
+        "objectifSpecifique": "Je suis confiant car Dieu est assez puissant pour prendre soin de moi.",
+        "objectifOperationnel": "Je retiens que la confiance en Dieu surmonte la peur et l’incertitude.",
+        "introduction": "Poser la question : « Si tu devais entrer dans un endroit dangereux, ferais-tu confiance à Dieu ? » Conclure : « Comme Josué et Caleb, nous devons faire confiance à Dieu même dans les situations difficiles. »",
+        "progression": [
+            "Moïse envoie douze espions pour explorer le pays de Canaan.",
+            "Dix espions rapportent que le pays est dangereux.",
+            "Josué et Caleb encouragent le peuple à faire confiance à Dieu.",
+            "La foi et la confiance en Dieu sont nécessaires pour obtenir la victoire."
+        ],
+        "pointCulminant": "Josué et Caleb démontrent la confiance en Dieu malgré la peur et le doute des autres.",
+        "messageTransmettre": "Dieu est plus grand que nos peurs et veille sur nous.",
+        "messageCentral": "Avoir confiance en Dieu nous permet de surmonter les difficultés et de recevoir ses bénédictions.",
+        "versetRetenir": "Nombres 14:9 - « Ne craignez point le peuple du pays… car l’Éternel est avec nous. »",
+        "evaluation": [
+            "Que rapportent les espions sur le pays ?",
+            "Qui avait confiance en Dieu et pourquoi ?",
+            "Comment montrer notre confiance en Dieu dans la vie quotidienne ?"
+        ]
+    },
+    "30 Août": {
+        "titre": "LA FEMME : UN ÊTRE À VALORISER",
+        "lecon": "Leçon 32",
+        "reference": "Genèse 2:7,18-24",
+        "versetSouligner": "Je prends soin des femmes et fais du bien autour de moi.",
+        "objectifSpecifique": "Je prends soin des femmes et fais du bien autour de moi.",
+        "objectifOperationnel": "Je retiens que le respect et l’amour envers les femmes sont des valeurs chrétiennes.",
+        "introduction": "Poser la question : « Comment montrer respect et gentillesse aux femmes autour de nous ? » Conclure : « Les femmes sont un cadeau de Dieu et doivent être respectées et valorisées. »",
+        "progression": [
+            "Dieu crée la femme pour être compagne et aide pour l’homme.",
+            "L’homme et la femme vivent en harmonie et respect mutuel.",
+            "Respecter et valoriser les femmes reflète l’amour de Dieu.",
+            "Les enfants apprennent à prendre soin et respecter les femmes dans leur vie quotidienne."
+        ],
+        "pointCulminant": "La création de la femme montre l’importance du respect et de l’amour.",
+        "messageTransmettre": "Les femmes doivent être respectées et valorisées en tout temps.",
+        "messageCentral": "Respecter et prendre soin des femmes est un commandement de Dieu et une preuve d’amour chrétien.",
+        "versetRetenir": "Genèse 2:18 - « Il n’est pas bon que l’homme soit seul ; je lui ferai une aide semblable à lui. »",
+        "evaluation": [
+            "Pourquoi Dieu a-t-il créé la femme ?",
+            "Comment montrer du respect aux femmes ?",
+            "Que devons-nous retenir sur l’amour et le respect envers les femmes ?"
+        ]
+    },
+    "06 Septembre": {
+        "titre": "JOURNÉE DE L'ENFANT MÉTHODISTE : DISCIPLE DE CHRIST, BON TÉMOIGNAGE",
+        "lecon": "JOURNEE DE L'ENFANT METHODISTE",
+        "reference": "",
+        "versetSouligner": "DISCIPLE DE CHRIST : BON TÉMOIGNAGE",
+        "objectifSpecifique": "Être un bon témoin de Christ dans ma vie quotidienne.",
+        "objectifOperationnel": "Je retiens que mon comportement et mes paroles doivent refléter la foi chrétienne.",
+        "introduction": "Poser la question : « Comment un enfant peut-il montrer qu’il aime Jésus dans sa vie de tous les jours ? » Conclure : « Nous pouvons être de bons disciples en étant honnêtes, gentils et en aidant les autres. »",
+        "progression": [
+            "Définir ce qu’est un disciple de Christ.",
+            "Exemples de bons témoignages dans la vie quotidienne.",
+            "Encourager les enfants à partager des actes de gentillesse et de foi.",
+            "Importance de vivre selon les enseignements de Jésus."
+        ],
+        "pointCulminant": "Les enfants partagent des exemples concrets de bons témoignages.",
+        "messageTransmettre": "Être disciple implique des paroles et des actes qui reflètent la foi.",
+        "messageCentral": "Un bon disciple de Christ montre sa foi par ses actions et son comportement.",
+        "versetRetenir": "Matthieu 5:16 - « Que votre lumière brille devant les hommes. »",
+        "evaluation": [
+            "Qu’est-ce qu’un bon disciple de Christ ?",
+            "Comment peux-tu montrer ton amour pour Jésus ?",
+            "Pourquoi est-il important de donner un bon témoignage ?"
+        ]
+    },
+    "13 Septembre": {
+        "titre": "LE PLUS GRAND DANS LE ROYAUME DES CIEUX",
+        "lecon": "Leçon 33",
+        "reference": "Matthieu 18:1-5",
+        "versetSouligner": "Je suis humble de cœur.",
+        "objectifSpecifique": "Je suis humble de cœur.",
+        "objectifOperationnel": "Je retiens que l’humilité est la clé pour être grand dans le royaume de Dieu.",
+        "introduction": "Poser la question : « Qui est le plus important selon toi ? » Conclure : « Dans le royaume de Dieu, les humbles sont grands. »",
+        "progression": [
+            "Les disciples demandent qui est le plus grand dans le royaume.",
+            "Jésus place un enfant devant eux et explique l’importance de l’humilité.",
+            "L’humilité permet de recevoir et de servir dans le royaume.",
+            "Exemples pratiques d’humilité dans la vie quotidienne."
+        ],
+        "pointCulminant": "Jésus enseigne que devenir humble comme un enfant est la voie vers la grandeur.",
+        "messageTransmettre": "L’humilité attire la bénédiction de Dieu.",
+        "messageCentral": "Être humble de cœur est essentiel pour grandir dans le royaume de Dieu.",
+        "versetRetenir": "Matthieu 18:4 - « Quiconque s’humilie comme cet enfant sera le plus grand dans le royaume des cieux. »",
+        "evaluation": [
+            "Pourquoi Jésus a-t-il utilisé un enfant pour enseigner l’humilité ?",
+            "Que signifie être humble de cœur ?",
+            "Comment peux-tu pratiquer l’humilité chaque jour ?"
+        ]
+    },
+    "20 Septembre": {
+        "titre": "JESUS ET LE CENTENIER",
+        "lecon": "Leçon 34",
+        "reference": "Matthieu 8:5-13",
+        "versetSouligner": "Quand je prie, je crois que Dieu m’exauce.",
+        "objectifSpecifique": "Quand je prie, je crois que Dieu m’exauce.",
+        "objectifOperationnel": "Je retiens que la foi et la confiance en Dieu rendent les prières efficaces.",
+        "introduction": "Poser la question : « Que fais-tu quand tu pries pour quelque chose de très important ? » Conclure : « Comme le centenier, nous devons avoir foi que Dieu entend nos prières. »",
+        "progression": [
+            "Un centenier vient demander à Jésus de guérir son serviteur.",
+            "Il exprime une grande foi et confiance en Jésus.",
+            "Jésus est impressionné par sa foi et guérit le serviteur à distance.",
+            "Le centenier reçoit la réponse à sa prière."
+        ],
+        "pointCulminant": "La foi du centenier permet la guérison sans que Jésus touche le serviteur.",
+        "messageTransmettre": "La foi et la confiance en Dieu rendent nos prières puissantes.",
+        "messageCentral": "Priez avec foi et confiance que Dieu exaucera vos prières.",
+        "versetRetenir": "Matthieu 8:13 - « Va, qu’il te soit fait selon ta foi. »",
+        "evaluation": [
+            "Quelle était la foi du centenier ?",
+            "Comment Jésus a-t-il répondu à sa foi ?",
+            "Que devons-nous apprendre sur la prière et la foi ?"
+        ]
+    },
+    "27 Septembre": {
+        "titre": "L’ENFANT ET LA TOXICOMANIE",
+        "lecon": "Leçon 35",
+        "reference": "Genèse 19:30-38",
+        "versetSouligner": "J’évite les drogues pour demeurer maître de mon corps.",
+        "objectifSpecifique": "J’évite les drogues pour demeurer maître de mon corps.",
+        "objectifOperationnel": "Je retiens que notre corps est un temple de Dieu et doit être protégé.",
+        "introduction": "Poser la question : « Que ferais-tu pour protéger ton corps et ta santé ? » Conclure : « Éviter les drogues nous aide à rester forts et sains pour servir Dieu. »",
+        "progression": [
+            "Expliquer que notre corps est un temple de Dieu.",
+            "Les dangers de la drogue et de ses conséquences.",
+            "Histoires bibliques montrant l’importance de garder le corps pur.",
+            "Encourager à prendre des décisions saines et pieuses."
+        ],
+        "pointCulminant": "L’enfant comprend que son corps doit être préservé pour servir Dieu.",
+        "messageTransmettre": "Prendre soin de son corps est un devoir chrétien.",
+        "messageCentral": "Éviter les drogues et prendre soin de son corps honore Dieu et protège notre vie.",
+        "versetRetenir": "1 Corinthiens 6:19 - « Ne savez-vous pas que votre corps est le temple du Saint-Esprit qui est en vous ? »",
+        "evaluation": [
+            "Pourquoi le corps est-il un temple de Dieu ?",
+            "Que se passe-t-il si on utilise des drogues ?",
+            "Comment pouvons-nous protéger notre corps chaque jour ?"
+        ]
+    },
+    "04 Octobre": {
+        "titre": "ELISEE ET LES ENFANTS MOQUEURS",
+        "lecon": "Leçon 36",
+        "reference": "2 Rois 2:23-25",
+        "versetSouligner": "J’aime et respecte toute personne.",
+        "objectifSpecifique": "J’aime et respecte toute personne.",
+        "objectifOperationnel": "Je retiens que le respect est essentiel et que se moquer est mal.",
+        "introduction": "Poser la question : « Comment réagirais-tu si quelqu’un se moquait de toi ? » Conclure : « Nous devons toujours respecter les autres, même si nous ne sommes pas d’accord avec eux. »",
+        "progression": [
+            "Des enfants se moquent d’Élisée en chemin.",
+            "Élisée prie et Dieu agit pour montrer que le moqueur ne respecte pas les commandements.",
+            "Les enfants comprennent la gravité de la moquerie.",
+            "L’histoire enseigne le respect et la crainte de Dieu."
+        ],
+        "pointCulminant": "La leçon montre que le respect des autres est vital et que Dieu voit tout.",
+        "messageTransmettre": "Respecter chacun est un commandement de Dieu.",
+        "messageCentral": "Aimer et respecter les autres reflète notre foi et honore Dieu.",
+        "versetRetenir": "1 Pierre 2:17 - « Aimez tous les hommes, aimez les frères, craignez Dieu, honorez le roi. »",
+        "evaluation": [
+            "Que se passe-t-il quand on se moque des autres ?",
+            "Pourquoi le respect est-il important ?",
+            "Comment pouvons-nous montrer le respect dans la vie quotidienne ?"
+        ]
+    },
+    "11 Octobre": {
+        "titre": "LA MULTIPLICATION DES PAINS",
+        "lecon": "Leçon 37",
+        "reference": "Jean 6:1-14",
+        "versetSouligner": "Quand j’ai des problèmes, je me confie à Christ.",
+        "objectifSpecifique": "Quand j’ai des problèmes, je me confie à Christ.",
+        "objectifOperationnel": "Je retiens que Dieu pourvoit à nos besoins quand nous avons foi en Lui.",
+        "introduction": "Montrer un petit panier et demander : « Que ferais-tu si tu devais partager ce que tu as avec beaucoup de personnes ? » Conclure : « Comme Jésus a nourri la foule, Dieu peut pourvoir à nos besoins. »",
+        "progression": [
+            "Une grande foule suit Jésus.",
+            "Les disciples ne savent pas comment les nourrir.",
+            "Jésus prend cinq pains et deux poissons et les multiplie.",
+            "Tous mangent à leur faim et il reste des restes."
+        ],
+        "pointCulminant": "Jésus multiplie les pains et nourrit la foule.",
+        "messageTransmettre": "Dieu pourvoit abondamment à ceux qui ont foi en Lui.",
+        "messageCentral": "Se confier à Christ dans nos besoins nous permet de recevoir sa provision et sa bénédiction.",
+        "versetRetenir": "Jean 6:11 - « Jésus prit les pains, rendit grâces et les distribua. »",
+        "evaluation": [
+            "Que faisait Jésus pour nourrir la foule ?",
+            "Pourquoi est-il important de se confier à Dieu ?",
+            "Comment pouvons-nous appliquer cette leçon dans notre vie ?"
+        ]
+    },
+    "18 Octobre": {
+        "titre": "LE CULTE METHODISTE",
+        "lecon": "Leçon 38",
+        "reference": "—",
+        "versetSouligner": "J’aime mon église et j’y adore Dieu avec joie.",
+        "objectifSpecifique": "J’aime mon église et j’y adore Dieu avec joie.",
+        "objectifOperationnel": "Je retiens que participer activement au culte nous rapproche de Dieu.",
+        "introduction": "Poser la question : « Que ressens-tu quand tu viens au culte ? » Conclure : « Aller à l’église et adorer Dieu nous rend heureux et nous aide à grandir dans la foi. »",
+        "progression": [
+            "Présenter les différentes parties du culte méthodiste.",
+            "Souligner l’importance de la prière, des chants et de l’enseignement.",
+            "Encourager la participation active des enfants.",
+            "Expliquer comment le culte renforce notre relation avec Dieu."
+        ],
+        "pointCulminant": "Les enfants participent activement au culte et ressentent la joie de servir Dieu.",
+        "messageTransmettre": "L’adoration avec joie rapproche de Dieu et renforce la foi.",
+        "messageCentral": "Aimer et participer au culte méthodiste nous permet de grandir dans la foi et de glorifier Dieu.",
+        "versetRetenir": "Psaume 100:2 - « Servez l’Éternel avec joie. »",
+        "evaluation": [
+            "Pourquoi est-il important de participer au culte ?",
+            "Comment montrer notre joie dans l’adoration ?",
+            "Qu’apprends-tu en assistant au culte ?"
+        ]
+    },
+    "25 Octobre": {
+        "titre": "JESUS A 12 ANS DANS LE TEMPLE",
+        "lecon": "Leçon 39",
+        "reference": "Luc 2:41-52",
+        "versetSouligner": "J’annonce la parole de Dieu et mets en pratique.",
+        "objectifSpecifique": "J’annonce la parole de Dieu et mets en pratique.",
+        "objectifOperationnel": "Je retiens que connaître la parole de Dieu dès le jeune âge est important.",
+        "introduction": "Poser la question : « Que ferais-tu si tu voulais apprendre plus sur Dieu ? » Conclure : « Comme Jésus, il est important de chercher la parole de Dieu et de la partager. »",
+        "progression": [
+            "Jésus, âgé de 12 ans, va au temple avec ses parents.",
+            "Il écoute les enseignants et pose des questions.",
+            "Tous s’étonnent de sa sagesse et de sa compréhension.",
+            "Jésus montre l’importance de connaître et pratiquer la parole de Dieu."
+        ],
+        "pointCulminant": "Jésus enseigne et montre sa compréhension dès son jeune âge.",
+        "messageTransmettre": "Apprendre et partager la parole de Dieu est essentiel dès l’enfance.",
+        "messageCentral": "Chercher, apprendre et mettre en pratique la parole de Dieu dès le jeune âge est un devoir chrétien.",
+        "versetRetenir": "Luc 2:49 - « Ne saviez-vous pas que je dois m’occuper des affaires de mon Père ? »",
+        "evaluation": [
+            "Que faisait Jésus au temple à 12 ans ?",
+            "Pourquoi est-il important de connaître la parole de Dieu ?",
+            "Comment pouvons-nous mettre en pratique ce que nous apprenons ?"
+        ]
+    },
+    "26 Octobre": {
+        "titre": "JESUS A 12 ANS DANS LE TEMPLE (niveau 3)",
+        "lecon": "Leçon 40",
+        "reference": "Luc 2:41-53",
+        "versetSouligner": "Enfant, je m'engage dans les affaires du Seigneur.",
+        "objectifSpecifique": "Enfant, je m'engage dans les affaires du Seigneur.",
+        "objectifOperationnel": "Je retiens que dès le jeune âge, nous pouvons servir Dieu activement.",
+        "introduction": "Poser la question : « Que peux-tu faire pour servir Dieu aujourd’hui ? » Conclure : « Comme Jésus, nous pouvons nous engager dès notre enfance dans le service de Dieu. »",
+        "progression": [
+            "Jésus participe activement au temple.",
+            "Il écoute et enseigne les adultes.",
+            "Ses actions montrent l’importance de l’engagement envers Dieu.",
+            "Encourager les enfants à s’impliquer dans les activités chrétiennes."
+        ],
+        "pointCulminant": "Jésus démontre que l’engagement envers Dieu est possible dès le jeune âge.",
+        "messageTransmettre": "Les enfants peuvent servir Dieu et montrer l’exemple.",
+        "messageCentral": "S’engager dans les affaires de Dieu dès l’enfance développe la foi et l’amour pour Lui.",
+        "versetRetenir": "Luc 2:49 - « Ne saviez-vous pas que je dois m’occuper des affaires de mon Père ? »",
+        "evaluation": [
+            "Comment Jésus a-t-il servi Dieu à 12 ans ?",
+            "Que pouvons-nous faire pour servir Dieu dès maintenant ?",
+            "Pourquoi est-il important de s’engager dans les affaires du Seigneur dès l’enfance ?"
+        ]
+    },
+    "01 Novembre": {
+        "titre": "LES FILLES DE LOT (niveaux 1-2)",
+        "lecon": "Leçon 40",
+        "reference": "Genèse 19:30-38",
+        "versetSouligner": "Je garde mon corps pur.",
+        "objectifSpecifique": "Je garde mon corps pur.",
+        "objectifOperationnel": "Je retiens que préserver mon corps du péché est une façon d’honorer Dieu.",
+        "introduction": "Poser la question : « Pourquoi est-il important de prendre soin de son corps ? » Conclure : « Garder notre corps pur est un moyen de vivre selon la volonté de Dieu. »",
+        "progression": [
+            "Les filles de Lot prennent des décisions difficiles après la destruction de Sodome et Gomorrhe.",
+            "Elles montrent les conséquences de leurs choix.",
+            "L’histoire enseigne l’importance de la pureté et de la vigilance.",
+            "Les enfants apprennent à faire de bons choix pour préserver leur corps."
+        ],
+        "pointCulminant": "L’histoire illustre que le respect des commandements de Dieu protège notre corps et notre vie.",
+        "messageTransmettre": "Faire attention à notre corps et à nos décisions nous rapproche de Dieu.",
+        "messageCentral": "Préserver son corps et ses choix selon Dieu est un devoir pour tous.",
+        "versetRetenir": "1 Corinthiens 6:19 - « Ne savez-vous pas que votre corps est le temple du Saint-Esprit qui est en vous ? »",
+        "evaluation": [
+            "Que montre l’histoire des filles de Lot ?",
+            "Pourquoi est-il important de garder son corps pur ?",
+            "Comment appliquer cette leçon dans la vie quotidienne ?"
+        ]
+    },
+    "02 Novembre": {
+        "titre": "LES FILLES DE LOT (niveau 3)",
+        "lecon": "Leçon 41",
+        "reference": "Genèse 19:30-38",
+        "versetSouligner": "Je me garde de l'inceste et garde mon corps pur.",
+        "objectifSpecifique": "Je me garde de l'inceste et garde mon corps pur.",
+        "objectifOperationnel": "Je retiens que protéger mon corps des pratiques interdites est essentiel pour respecter Dieu et moi-même.",
+        "introduction": "Poser la question : « Comment protéger notre corps et notre cœur contre le mal ? » Conclure : « Faire attention à nos actes préserve notre pureté et notre relation avec Dieu. »",
+        "progression": [
+            "Les filles de Lot prennent de mauvaises décisions et leurs conséquences.",
+            "L’histoire montre l’importance de la moralité et de la vigilance.",
+            "Les enfants apprennent à identifier les actions qui blessent leur corps et leur esprit.",
+            "Encourager à choisir la pureté et à obéir aux commandements de Dieu."
+        ],
+        "pointCulminant": "La leçon montre que faire des choix purs protège notre corps et notre foi.",
+        "messageTransmettre": "Respecter son corps et les commandements de Dieu est crucial.",
+        "messageCentral": "Se protéger des pratiques mauvaises et garder son corps pur est un acte de foi et de respect envers Dieu.",
+        "versetRetenir": "1 Corinthiens 6:19 - « Ne savez-vous pas que votre corps est le temple du Saint-Esprit qui est en vous ? »",
+        "evaluation": [
+            "Que devons-nous éviter pour garder notre corps pur ?",
+            "Pourquoi est-il important de se protéger des mauvaises pratiques ?",
+            "Comment mettre en pratique la pureté dans la vie quotidienne ?"
+        ]
+    },
+    "08 Novembre": {
+        "titre": "RÉVISION / ÉVALUATION / PROGRAMME LOCAL",
+        "lecon": "",
+        "reference": "—",
+        "versetSouligner": "Revoir les leçons permet de mieux comprendre et pratiquer la parole de Dieu.",
+        "objectifSpecifique": "Faire la révision des leçons passées et un devoir si possible.",
+        "objectifOperationnel": "Je retiens les leçons précédentes pour mieux les mettre en pratique dans ma vie.",
+        "introduction": "Poser des questions sur les leçons passées et encourager les enfants à raconter ce qu’ils ont retenu. Conclure : « Réviser nous aide à grandir dans la foi et à appliquer la parole de Dieu. »",
+        "progression": [
+            "Rappel des thèmes déjà étudiés.",
+            "Discussion sur les histoires et leurs enseignements.",
+            "Échanges sur les applications dans la vie quotidienne."
+        ],
+        "pointCulminant": "Les enfants expliquent une leçon qui les a marqués et ce qu’ils ont retenu.",
+        "messageTransmettre": "Revoir et méditer la parole de Dieu renforce notre foi.",
+        "messageCentral": "Réviser les leçons précédentes nous aide à mieux vivre selon les enseignements de Dieu.",
+        "versetRetenir": "Josué 1:8 - « Méditer ce livre de la loi jour et nuit… »",
+        "evaluation": [
+            "Quelle leçon te souviens-tu le mieux ?",
+            "Pourquoi est-il important de revoir les leçons ?",
+            "Comment appliquer ce que tu as appris ?"
+        ]
+    },
+    "15 Novembre": {
+        "titre": "MON EGLISE LOCALE",
+        "lecon": "Leçon 41",
+        "reference": "Hébreux 10:25",
+        "versetSouligner": "Je suis fier d’être méthodiste et de connaître mon église.",
+        "objectifSpecifique": "Je suis fier d’être méthodiste et de connaître mon église.",
+        "objectifOperationnel": "Je retiens l’importance de connaître son église et de participer activement à ses activités.",
+        "introduction": "Poser la question : « Pourquoi est-il important de connaître ton église ? » Conclure : « Connaître et aimer notre église nous aide à servir Dieu et notre communauté. »",
+        "progression": [
+            "Présenter l’église locale et ses activités.",
+            "Expliquer l’histoire et la mission de l’église méthodiste.",
+            "Encourager la participation des enfants et des jeunes.",
+            "Montrer comment chacun peut contribuer au bien de l’église."
+        ],
+        "pointCulminant": "Les enfants expriment leur fierté et leur engagement envers l’église.",
+        "messageTransmettre": "Connaître et aimer son église encourage la foi et le service.",
+        "messageCentral": "Être actif et fier de son église renforce notre foi et notre service à Dieu.",
+        "versetRetenir": "Hébreux 10:25 - « N’abandonnons pas notre assemblée… »",
+        "evaluation": [
+            "Pourquoi est-il important de connaître son église ?",
+            "Comment participer activement aux activités de l’église ?",
+            "Que gagne-t-on à aimer et servir son église ?"
+        ]
+    },
+    "22 Novembre": {
+        "titre": "ELISEE PURIFIE L’EAU",
+        "lecon": "Leçon 42",
+        "reference": "2 Rois 2:19-22",
+        "versetSouligner": "J’utilise l’eau en évitant de la gaspiller.",
+        "objectifSpecifique": "J’utilise l’eau de façon responsable.",
+        "objectifOperationnel": "Je retiens que Dieu bénit ceux qui préservent les ressources et respectent la création.",
+        "introduction": "Montrer un verre d’eau propre et poser la question : « Comment utiliser l’eau de façon responsable ? » Conclure : « Utiliser et préserver l’eau est un acte de respect envers Dieu et la création. »",
+        "progression": [
+            "La ville avait de l’eau impropre et causait la souffrance.",
+            "Élisée montre comment l’eau peut être purifiée par la foi et l’obéissance.",
+            "L’histoire enseigne la valeur de l’eau et la responsabilité de chacun.",
+            "Les enfants apprennent à respecter et préserver les ressources naturelles."
+        ],
+        "pointCulminant": "L’eau est purifiée grâce à Dieu et à la foi d’Élisée.",
+        "messageTransmettre": "Dieu bénit ceux qui respectent et utilisent les ressources avec sagesse.",
+        "messageCentral": "Utiliser l’eau de façon responsable et respectueuse est un devoir chrétien.",
+        "versetRetenir": "2 Rois 2:21 - « Ainsi parle l’Éternel : J’ai purifié ces eaux… »",
+        "evaluation": [
+            "Comment Élisée a-t-il purifié l’eau ?",
+            "Pourquoi est-il important d’utiliser l’eau de façon responsable ?",
+            "Comment pouvons-nous appliquer cette leçon chez nous ?"
+        ]
+    },
+    "29 Novembre": {
+        "titre": "LES CRITIQUES",
+        "lecon": "Leçon 43",
+        "reference": "Matthieu 7:1-5",
+        "versetSouligner": "Je me juge moi-même plutôt que de juger les autres.",
+        "objectifSpecifique": "Je me juge moi-même plutôt que de juger les autres.",
+        "objectifOperationnel": "Je retiens qu’avant de critiquer les autres, il faut examiner nos propres actions.",
+        "introduction": "Montrer un miroir et demander : « Que fais-tu quand tu vois quelqu’un faire une erreur ? » Conclure : « Avant de juger, regardons d’abord nos propres actions. »",
+        "progression": [
+            "Jésus enseigne l’importance de ne pas juger les autres injustement.",
+            "Exemple de la poutre et de la paille dans l’œil.",
+            "Encouragement à corriger ses propres fautes avant de corriger celles des autres.",
+            "Dieu voit notre cœur et apprécie l’humilité et l’auto-examen."
+        ],
+        "pointCulminant": "Jésus montre que se corriger soi-même avant de critiquer les autres est juste et agréable à Dieu.",
+        "messageTransmettre": "L’humilité et le jugement juste plaisent à Dieu.",
+        "messageCentral": "Se juger soi-même avant de juger les autres rend notre vie droite et conforme à la volonté de Dieu.",
+        "versetRetenir": "Matthieu 7:5 - « Enlève d’abord la poutre de ton œil… »",
+        "evaluation": [
+            "Que signifie se juger soi-même avant de juger les autres ?",
+            "Pourquoi est-il mauvais de critiquer sans réfléchir ?",
+            "Comment pratiquer l’humilité ?"
+        ]
+    },
+    "06 Décembre": {
+        "titre": "JESUS GUÉRIT UN LEPREUX",
+        "lecon": "Leçon 44",
+        "reference": "Matthieu 8:1-4",
+        "versetSouligner": "Je dis à Jésus ce dont j’ai besoin.",
+        "objectifSpecifique": "Je demande à Jésus ce dont j’ai besoin.",
+        "objectifOperationnel": "Je retiens que Jésus peut guérir et répondre à nos besoins quand nous venons à Lui avec foi.",
+        "introduction": "Poser la question : « Que ferais-tu si tu avais besoin d’aide ou de guérison ? » Conclure : « Nous pouvons toujours demander à Jésus, et Il nous aidera. »",
+        "progression": [
+            "Un lépreux s’approche de Jésus et lui demande de le guérir.",
+            "Jésus le touche et le guérit.",
+            "Jésus lui demande de montrer sa guérison aux prêtres et d’offrir ce qui est prescrit.",
+            "L’histoire montre la puissance de Jésus et l’importance de la foi."
+        ],
+        "pointCulminant": "Jésus guérit le lépreux qui vient à Lui avec foi.",
+        "messageTransmettre": "Jésus écoute nos prières et peut accomplir des miracles dans nos vies.",
+        "messageCentral": "Venez à Jésus avec foi, et Il répondra à vos besoins selon Sa volonté.",
+        "versetRetenir": "Matthieu 8:3 - « Et Jésus étendit la main, le toucha, et dit : Je le veux, sois purifié. »",
+        "evaluation": [
+            "Que fait le lépreux pour obtenir la guérison ?",
+            "Que fait Jésus pour le guérir ?",
+            "Comment pouvons-nous venir à Jésus avec foi ?"
+        ]
+    },
+    "13 Décembre": {
+        "titre": "LA NAISSANCE DE JEAN-BAPTISTE",
+        "lecon": "Leçon 45",
+        "reference": "Luc 1:5-25, 57-80",
+        "versetSouligner": "Je crois qu’avec Dieu tout est possible.",
+        "objectifSpecifique": "Je crois qu’avec Dieu tout est possible.",
+        "objectifOperationnel": "Je retiens que Dieu accomplit ses promesses et que la foi ouvre la voie aux miracles.",
+        "introduction": "Poser la question : « Que ferais-tu si Dieu te promet quelque chose d’impossible à réaliser ? » Conclure : « Avec Dieu, rien n’est impossible, et Sa parole s’accomplit toujours. »",
+        "progression": [
+            "Zacharie et Élisabeth sont âgés et sans enfants.",
+            "Un ange annonce à Zacharie que leur fils Jean naîtra.",
+            "Zacharie doute, mais Dieu accomplit Sa promesse.",
+            "Jean naît et remplit la mission que Dieu lui a confiée."
+        ],
+        "pointCulminant": "La naissance de Jean-Baptiste montre que Dieu tient toujours ses promesses.",
+        "messageTransmettre": "Nous devons croire en la puissance de Dieu, même dans les situations impossibles.",
+        "messageCentral": "Croire en Dieu rend possible ce qui semble impossible ; Sa parole s’accomplit toujours.",
+        "versetRetenir": "Luc 1:37 - « Car rien n’est impossible à Dieu. »",
+        "evaluation": [
+            "Qui sont les parents de Jean-Baptiste ?",
+            "Que leur a annoncé l’ange ?",
+            "Que devons-nous apprendre de cette histoire sur la foi ?"
+        ]
+    },
+    "20 Décembre": {
+        "titre": "ANNONCE DE LA NAISSANCE DE JESUS",
+        "lecon": "Leçon 46",
+        "reference": "Luc 1:28-56",
+        "versetSouligner": "Je me soumets à la volonté de Dieu.",
+        "objectifSpecifique": "Je me soumets à la volonté de Dieu.",
+        "objectifOperationnel": "Je retiens que l’obéissance à Dieu conduit à la bénédiction et à l’accomplissement de Sa promesse.",
+        "introduction": "Poser la question : « Que ferais-tu si Dieu te demandait quelque chose de spécial ? » Conclure : « Comme Marie, nous devons obéir et faire confiance à Dieu. »",
+        "progression": [
+            "L’ange Gabriel annonce à Marie qu’elle donnera naissance à Jésus.",
+            "Marie accepte avec humilité la volonté de Dieu.",
+            "Elle visite Élisabeth et loue Dieu pour Ses merveilles.",
+            "L’histoire montre l’importance de la foi et de l’obéissance."
+        ],
+        "pointCulminant": "Marie se soumet à la volonté de Dieu et devient la mère de Jésus.",
+        "messageTransmettre": "La foi et l’obéissance à Dieu conduisent à des bénédictions extraordinaires.",
+        "messageCentral": "Se soumettre à Dieu permet de participer à Son plan et de recevoir Sa bénédiction.",
+        "versetRetenir": "Luc 1:38 - « Voici la servante du Seigneur ; qu’il me soit fait selon ta parole. »",
+        "evaluation": [
+            "Qui a annoncé la naissance de Jésus à Marie ?",
+            "Comment Marie a-t-elle réagi à la volonté de Dieu ?",
+            "Que pouvons-nous apprendre de son obéissance et de sa foi ?"
+        ]
+    },
+    "25 Décembre": {
+        "titre": "NOËL : LA PAROLE FAITE CHAIR",
+        "lecon": "Leçon 47",
+        "reference": "Jean 1:1-18, Luc 2:1-20",
+        "versetSouligner": "Je suis un témoin de Jésus-Christ et du Fils unique de Dieu.",
+        "objectifSpecifique": "Je suis un témoin de Jésus-Christ et du Fils unique de Dieu.",
+        "objectifOperationnel": "Je retiens que Jésus est venu pour nous sauver et que nous devons partager cette bonne nouvelle.",
+        "introduction": "Poser la question : « Pourquoi célébrons-nous Noël ? » Conclure : « Jésus est le Fils de Dieu, et nous devons être ses témoins dans le monde. »",
+        "progression": [
+            "Jésus, la Parole faite chair, naît à Bethléem.",
+            "Les anges annoncent sa naissance aux bergers.",
+            "Les bergers viennent adorer Jésus et partager la nouvelle.",
+            "L’histoire montre la joie et l’importance de témoigner de Jésus."
+        ],
+        "pointCulminant": "La naissance de Jésus apporte la lumière et le salut au monde.",
+        "messageTransmettre": "Nous devons être témoins de Jésus et partager la bonne nouvelle.",
+        "messageCentral": "Jésus est venu pour sauver le monde, et nous sommes appelés à être ses témoins.",
+        "versetRetenir": "Jean 1:14 - « Et la Parole a été faite chair, et elle a habité parmi nous. »",
+        "evaluation": [
+            "Pourquoi Jésus est-il venu sur terre ?",
+            "Qui a été témoin de sa naissance ?",
+            "Comment pouvons-nous être témoins de Jésus aujourd’hui ?"
+        ]
+    },
+    "27 Décembre": {
+        "titre": "MASSA ET MERIBA / BILAN 2026",
+        "lecon": "Leçon 48",
+        "reference": "Exode 17:1-7",
+        "versetSouligner": "Je garde ma foi en Dieu, quel que soit le problème.",
+        "objectifSpecifique": "Je garde ma foi en Dieu malgré les difficultés.",
+        "objectifOperationnel": "Je retiens que la foi et la confiance en Dieu nous aident à surmonter tous les problèmes.",
+        "introduction": "Poser la question : « Que fais-tu quand tu traverses une épreuve difficile ? » Conclure : « Comme Moïse, nous devons rester confiants et croire que Dieu pourvoit à nos besoins. »",
+        "progression": [
+            "Les enfants d’Israël manquent d’eau et se plaignent à Moïse.",
+            "Moïse prie et obéit aux instructions de Dieu.",
+            "L’eau sort du rocher et le peuple est désaltéré.",
+            "L’histoire montre que la foi en Dieu apporte la solution même dans les moments difficiles."
+        ],
+        "pointCulminant": "Moïse frappe le rocher par la foi et l’eau jaillit.",
+        "messageTransmettre": "Dieu pourvoit et soutient ceux qui gardent la foi.",
+        "messageCentral": "Rester ferme dans la foi et la confiance en Dieu permet de surmonter toutes les épreuves.",
+        "versetRetenir": "Exode 17:6 - « Voici que je me tiens devant toi sur le rocher… »",
+        "evaluation": [
+            "Que se passe-t-il quand le peuple manque d’eau ?",
+            "Comment Moïse agit-il face à ce problème ?",
+            "Que pouvons-nous apprendre sur la foi et la confiance en Dieu ?"
+        ]
+    }
+};
+
+function showDetails() {
+    const selectedSunday = document.getElementById('sundaySelect').value;
+    const selectedLevel = document.getElementById('levelSelect').value;
+    const detailsDiv = document.getElementById('details');
+    
+    if (!selectedSunday || !selectedLevel) {
+        detailsDiv.innerHTML = '<p style="color: red;">⚠️ Veuillez sélectionner un dimanche ET un niveau.</p>';
+        return;
+    }
+    
+    // Gestion spéciale pour les dates avec plusieurs versions
+    let lesson;
+    if (selectedSunday === "02 Août" && selectedLevel === "3") {
+        lesson = lessons["02 Août (3)"];
+    } else if (selectedSunday === "01 Novembre" && selectedLevel === "3") {
+        lesson = lessons["02 Novembre"];
+    } else if (selectedSunday === "01 Novembre" && (selectedLevel === "1" || selectedLevel === "2")) {
+        lesson = lessons["01 Novembre"];
+    } else if (selectedSunday === "26 Octobre" && selectedLevel === "3") {
+        lesson = lessons["26 Octobre"];
+    } else if (selectedSunday === "25 Octobre" && selectedLevel === "3") {
+        lesson = lessons["26 Octobre"];
+    } else {
+        lesson = lessons[selectedSunday];
+    }
+    
+    if (!lesson) {
+        detailsDiv.innerHTML = '<p style="color: red;">❌ Aucune préparation pour cette date.</p>';
+        return;
+    }
+    
+    // Construction de l'affichage avec résumé en premier
+    let html = `
+        <div class="summary">
+            <h3 style="color: white; margin-top: 0;">📅 ${selectedSunday} - Niveau ${selectedLevel}</h3>
+            <p><span class="label">📖 Leçon :</span> <span class="value">${lesson.lecon || '—'}</span></p>
+            <p><span class="label">📌 Thème :</span> <span class="value">${lesson.titre}</span></p>
+            <p><span class="label">🔖 Référence :</span> <span class="value">${lesson.reference}</span></p>
+            <p><span class="label">🎯 Objectif spécifique :</span> <span class="value">${lesson.objectifSpecifique}</span></p>
+        </div>
+        
+        <div class="preparation">
+            <h3>Préparation détaillée</h3>
+            
+            <div class="verse">📌 Verset à souligner : ${lesson.versetSouligner}</div>
+            
+            <h4>Objectif opérationnel</h4>
+            <p>${lesson.objectifOperationnel}</p>
+            
+            <h4>Introduction</h4>
+            <p>${lesson.introduction}</p>
+            
+            <h4>Progression</h4>
+            <ul>
+    `;
+    
+    lesson.progression.forEach(point => {
+        html += `<li>${point}</li>`;
+    });
+    
+    html += `</ul>
+            
+            <div class="highlight">🔔 Point culminant : ${lesson.pointCulminant}</div>
+            
+            <p><strong>👉 Message à transmettre :</strong> ${lesson.messageTransmettre}</p>
+            
+            <h4>Message central</h4>
+            <p>${lesson.messageCentral}</p>
+            
+            <h4>Verset à retenir</h4>
+            <div class="verse">📖 ${lesson.versetRetenir}</div>
+            
+            <h4>Évaluation</h4>
+            <ol>
+    `;
+    
+    lesson.evaluation.forEach(question => {
+        html += `<li>${question}</li>`;
+    });
+    
+    html += `</ol>
+        </div>`;
+    
+    detailsDiv.innerHTML = html;
+}
+
+function filterMonth(month) {
+    const select = document.getElementById('sundaySelect');
+    let visibleCount = 0;
+    
+    for (let option of select.options) {
+        if (option.value === '') continue;
+        
+        if (option.value.includes(month)) {
+            option.style.display = '';
+            visibleCount++;
+        } else {
+            option.style.display = 'none';
+        }
+    }
+    
+    document.getElementById('counter').textContent = visibleCount + ' dimanche(s) en ' + month;
+    select.value = '';
+}
+
+function resetFilter() {
+    const select = document.getElementById('sundaySelect');
+    let totalCount = 0;
+    
+    for (let option of select.options) {
+        option.style.display = '';
+        if (option.value !== '') totalCount++;
+    }
+    
+    document.getElementById('counter').textContent = totalCount + ' dimanches au total';
+    select.value = '';
+}
+
+window.onload = function() {
+    resetFilter();
+};
+</script>
+
+</body>
+</html>
