@@ -1,0 +1,406 @@
+:root {
+    --bg-1: #0f172a;
+    --bg-2: #1e293b;
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --accent: #0ea5e9;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --surface: #ffffff;
+    --surface-soft: #f8fafc;
+    --border: #e5e7eb;
+    --success-soft: #ecfeff;
+    --warning-soft: #fff7ed;
+}
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at top left, #1d4ed8 0%, var(--bg-1) 35%, #020617 100%);
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text);
+}
+.page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 32px 20px 40px;
+}
+.hero {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    color: #fff;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 20px 45px rgba(2, 6, 23, 0.35);
+    backdrop-filter: blur(6px);
+}
+.hero h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    letter-spacing: 0.2px;
+}
+.hero p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+.container {
+    background: var(--surface);
+    border-radius: 18px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+    border: 1px solid var(--border);
+    padding: 24px;
+}
+.control-panel {
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+}
+.control-panel.tab-panel {
+    display: none;
+}
+.control-panel.tab-panel.active {
+    display: block;
+}
+.label-title {
+    display: block;
+    margin: 0 0 8px;
+    font-weight: 600;
+    color: #0f172a;
+}
+select,
+button {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.98rem;
+}
+select {
+    background: #fff;
+}
+select:focus {
+    outline: 2px solid rgba(37, 99, 235, 0.25);
+    border-color: var(--primary);
+}
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.primary-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+}
+.details {
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    padding: 22px;
+    border-radius: 12px;
+    margin-top: 8px;
+    max-height: 620px;
+    overflow-y: auto;
+}
+.summary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+}
+.summary p {
+    margin: 12px 0;
+    font-size: 1.1em;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 8px;
+}
+.summary .label {
+    color: #dbeafe;
+    font-weight: bold;
+    display: inline-block;
+    min-width: 130px;
+}
+.summary .value {
+    color: white;
+    font-weight: normal;
+}
+.preparation {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid var(--primary);
+}
+.preparation h3 {
+    color: var(--primary);
+    margin: 20px 0 10px 0;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 5px;
+}
+.preparation h4 {
+    color: #0f172a;
+    margin: 15px 0 5px 0;
+    font-style: italic;
+}
+.preparation p {
+    margin: 10px 0;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    line-height: 1.6;
+}
+.label {
+    font-weight: bold;
+    color: var(--primary);
+    display: inline-block;
+    min-width: 120px;
+}
+.highlight {
+    background: var(--warning-soft);
+    border-left: 4px solid #f59e0b;
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.verse {
+    background: var(--success-soft);
+    border-left: 4px solid var(--accent);
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-radius: 5px;
+    font-style: italic;
+}
+.quick-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+.month-selector {
+    flex: 3;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+}
+.month-btn,
+.reset-btn {
+    background: #eef2ff;
+    color: #1e293b;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s;
+}
+.month-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+.reset-btn {
+    flex: 1;
+    background: #ef4444;
+    color: white;
+    font-weight: bold;
+}
+.reset-btn:hover {
+    background: #dc2626;
+}
+.counter {
+    text-align: left;
+    font-size: 0.9em;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-weight: 600;
+}
+.preparation ul,
+.preparation ol {
+    background: #f8fafc;
+    padding: 15px 15px 15px 35px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+.preparation li {
+    margin-bottom: 8px;
+}
+.empty-state {
+    text-align: center;
+    color: var(--muted);
+    padding: 20px 10px;
+}
+.tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+}
+.tab-btn {
+    margin: 0;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: #0f172a;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.tab-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.tab-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff;
+    border-color: transparent;
+}
+.tab-panel {
+    display: none;
+}
+.tab-panel.active {
+    display: block;
+}
+.resource-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+.resource-box h3 {
+    margin: 0 0 10px;
+    color: var(--primary);
+}
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+.chip {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+}
+.search-input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    font-size: 0.96rem;
+}
+.dict-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #fff;
+}
+.dict-item h4 {
+    margin: 0 0 6px;
+    color: #0f172a;
+}
+.dict-item p {
+    margin: 0;
+    color: #334155;
+    line-height: 1.5;
+}
+.dict-meta {
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 0.86rem;
+}
+.dict-tags {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.dict-tag {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    padding: 3px 8px;
+    font-size: 0.78rem;
+}
+.search-meta {
+    margin-top: -4px;
+    margin-bottom: 10px;
+    color: #64748b;
+    font-size: 0.86rem;
+}
+.liturgy-nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+}
+.liturgy-btn {
+    margin: 0;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    color: #1e3a8a;
+    border-radius: 8px;
+    padding: 10px 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.liturgy-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff;
+    border-color: transparent;
+}
+.liturgy-content {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    line-height: 1.6;
+    white-space: pre-line;
+}
+@media (max-width: 860px) {
+    .quick-nav {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .month-selector {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .book-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .liturgy-nav {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 560px) {
+    .page {
+        padding: 18px 12px 24px;
+    }
+    .container {
+        padding: 14px;
+    }
+    .month-selector {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .tabs {
+        grid-template-columns: 1fr;
+    }
+    .book-list {
+        grid-template-columns: 1fr;
+    }
+    .liturgy-nav {
+        grid-template-columns: 1fr;
+    }
+}

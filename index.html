@@ -4,69 +4,283 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lectionnaire ECODIM 2026 - Préparation de leçon</title>
+<link rel="stylesheet" href="styles.css">
 <style>
-    body { 
-        font-family: Arial, sans-serif; 
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    :root {
+        --bg-1: #0f172a;
+        --bg-2: #1e293b;
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --accent: #0ea5e9;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --surface: #ffffff;
+        --surface-soft: #f8fafc;
+        --border: #e5e7eb;
+        --success-soft: #ecfeff;
+        --warning-soft: #fff7ed;
+    }
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: radial-gradient(circle at top left, #1d4ed8 0%, var(--bg-1) 35%, #020617 100%);
         min-height: 100vh;
-        padding: 20px; 
         margin: 0;
+        color: var(--text);
     }
-    h1 { 
-        text-align: center; 
-        color: white; 
-        margin-bottom: 30px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    .page {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 32px 20px 40px;
     }
-    .container { 
-        max-width: 1000px; 
-        margin: 20px auto; 
-        background: white; 
-        padding: 30px; 
-        border-radius: 15px; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+    .hero {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        color: #fff;
+        padding: 28px;
+        margin-bottom: 20px;
+        box-shadow: 0 20px 45px rgba(2, 6, 23, 0.35);
+        backdrop-filter: blur(6px);
     }
-    select, button { 
-        width: 100%; 
-        padding: 12px; 
-        margin-bottom: 20px; 
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 1em;
+    .hero-brand {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .hero-logo {
+        display: block;
+        max-width: min(100%, 440px);
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+    }
+    .hero-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+    .hero-text {
+        flex: 1;
+        min-width: 200px;
+    }
+    .hero h1 {
+        margin: 0 0 8px;
+        font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+        letter-spacing: 0.2px;
+    }
+    .hero p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    .logout-btn {
+        flex-shrink: 0;
+        width: auto;
+        margin: 0;
+        padding: 8px 14px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        color: #fff;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+    .logout-btn:hover {
+        background: rgba(255, 255, 255, 0.22);
+    }
+    .access-gate {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        padding-bottom: 24px;
+        background: radial-gradient(circle at top left, #1d4ed8 0%, #0f172a 40%, #020617 100%);
+        min-height: 100vh;
+    }
+    .access-gate[hidden] {
+        display: none !important;
+    }
+    .access-panel {
+        width: 100%;
+        max-width: 400px;
+        background: #fff;
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: 0 24px 48px rgba(2, 6, 23, 0.45);
+        border: 1px solid var(--border);
+    }
+    .access-logo-wrap {
+        text-align: center;
+        margin: 0 0 18px;
+    }
+    .access-logo {
+        display: block;
+        max-width: min(100%, 340px);
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+    }
+    .access-site-title {
+        margin: 0 0 14px;
+        font-size: clamp(1.2rem, 2.8vw, 1.55rem);
+        font-weight: 700;
+        color: #0f172a;
+        text-align: center;
+        line-height: 1.25;
+        letter-spacing: 0.02em;
+    }
+    .access-title {
+        margin: 0 0 8px;
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #334155;
+        text-align: center;
+    }
+    .access-intro {
+        margin: 0 0 20px;
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    .access-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+    .access-label {
+        display: block;
+        margin: 0 0 8px;
+        font-weight: 600;
+        color: #0f172a;
+        font-size: 0.92rem;
+    }
+    .access-input {
+        width: 100%;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 1rem;
+    }
+    .access-input:focus {
+        outline: 2px solid rgba(37, 99, 235, 0.25);
+        border-color: var(--primary);
+    }
+    .access-error {
+        min-height: 1.25em;
+        margin: 0 0 8px;
+        color: #b91c1c;
+        font-size: 0.9rem;
+    }
+    .access-submit {
+        margin-bottom: 0;
+    }
+    .contact-info-end {
+        margin-top: 40px;
+        padding: 20px 20px 10px;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .contact-info-end p {
+        margin: 8px 0;
+        color: white;
+        font-size: 0.95rem;
+    }
+    .contact-info-end a {
+        color: #93c5fd;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .contact-info-end a:hover {
+        text-decoration: underline;
+    }
+    .contact-note {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+    .app-root[hidden] {
+        display: none !important;
+    }
+    .container {
+        background: var(--surface);
+        border-radius: 18px;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+        border: 1px solid var(--border);
+        padding: 24px;
+    }
+    .control-panel {
+        background: var(--surface-soft);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 16px;
+    }
+    .control-panel.tab-panel {
+        display: none;
+    }
+    .control-panel.tab-panel.active {
+        display: block;
+    }
+    .label-title {
+        display: block;
+        margin: 0 0 8px;
+        font-weight: 600;
+        color: #0f172a;
+    }
+    select,
+    button {
+        width: 100%;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 0.98rem;
+    }
+    select {
+        background: #fff;
     }
     select:focus {
-        outline: none;
-        border-color: #2980b9;
+        outline: 2px solid rgba(37, 99, 235, 0.25);
+        border-color: var(--primary);
     }
-    button { 
-        background-color: #2980b9; 
-        color: white; 
-        border: none; 
+    .primary-btn {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        border: none;
         cursor: pointer;
-        font-weight: bold;
-        font-size: 1.1em;
-        transition: background-color 0.3s;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    button:hover { 
-        background-color: #1f6391; 
+    .primary-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
     }
-    .details { 
-        background: #f8f9fa; 
-        padding: 25px; 
-        border-radius: 10px;
-        margin-top: 20px;
-        max-height: 600px;
+    .details {
+        background: var(--surface-soft);
+        border: 1px solid var(--border);
+        padding: 22px;
+        border-radius: 12px;
+        margin-top: 8px;
+        max-height: 620px;
         overflow-y: auto;
     }
     
     /* Style pour le résumé (éléments principaux) */
     .summary {
-        background: #2980b9;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
         color: white;
         padding: 20px;
         border-radius: 10px;
         margin-bottom: 25px;
-        box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
+        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
     }
     .summary p {
         margin: 12px 0;
@@ -75,7 +289,7 @@
         padding-bottom: 8px;
     }
     .summary .label {
-        color: #ffd966;
+        color: #dbeafe;
         font-weight: bold;
         display: inline-block;
         min-width: 130px;
@@ -87,47 +301,47 @@
     
     /* Style pour la préparation détaillée */
     .preparation {
-        background: white;
+        background: #fff;
         padding: 20px;
         border-radius: 10px;
-        border-left: 5px solid #2980b9;
+        border-left: 5px solid var(--primary);
     }
     .preparation h3 {
-        color: #2980b9;
+        color: var(--primary);
         margin: 20px 0 10px 0;
-        border-bottom: 2px solid #2980b9;
+        border-bottom: 2px solid var(--primary);
         padding-bottom: 5px;
     }
     .preparation h4 {
-        color: #2c3e50;
+        color: #0f172a;
         margin: 15px 0 5px 0;
         font-style: italic;
     }
     .preparation p { 
         margin: 10px 0;
         padding: 8px 12px;
-        background: #f8f9fa;
+        background: #f8fafc;
         border-radius: 5px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         line-height: 1.6;
     }
-    .label { 
+    .label {
         font-weight: bold; 
-        color: #2980b9; 
+        color: var(--primary);
         display: inline-block;
         min-width: 120px;
     }
     .highlight {
-        background: #fff3cd;
-        border-left: 4px solid #ffc107;
+        background: var(--warning-soft);
+        border-left: 4px solid #f59e0b;
         padding: 10px 15px;
         margin: 15px 0;
         border-radius: 5px;
         font-weight: bold;
     }
     .verse {
-        background: #e8f4fd;
-        border-left: 4px solid #2980b9;
+        background: var(--success-soft);
+        border-left: 4px solid var(--accent);
         padding: 10px 15px;
         margin: 15px 0;
         border-radius: 5px;
@@ -136,7 +350,7 @@
     .quick-nav {
         display: flex;
         gap: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         align-items: center;
     }
     .month-selector {
@@ -146,8 +360,8 @@
         gap: 5px;
     }
     .month-btn, .reset-btn {
-        background: #ecf0f1;
-        color: #2c3e50;
+        background: #eef2ff;
+        color: #1e293b;
         border: none;
         padding: 8px;
         border-radius: 5px;
@@ -156,28 +370,29 @@
         transition: all 0.3s;
     }
     .month-btn:hover {
-        background: #2980b9;
+        background: var(--primary);
         color: white;
     }
     .reset-btn {
         flex: 1;
-        background: #e74c3c;
+        background: #ef4444;
         color: white;
         font-weight: bold;
     }
     .reset-btn:hover {
-        background: #c0392b;
+        background: #dc2626;
     }
     .counter {
-        text-align: right;
+        text-align: left;
         font-size: 0.9em;
-        color: #7f8c8d;
-        margin-bottom: 5px;
+        color: var(--muted);
+        margin-bottom: 14px;
+        font-weight: 600;
     }
     
     /* Style pour les listes dans la préparation */
     .preparation ul, .preparation ol {
-        background: #f8f9fa;
+        background: #f8fafc;
         padding: 15px 15px 15px 35px;
         border-radius: 8px;
         margin: 10px 0;
@@ -185,38 +400,393 @@
     .preparation li {
         margin-bottom: 8px;
     }
+    .empty-state {
+        text-align: center;
+        color: var(--muted);
+        padding: 20px 10px;
+    }
+    .tabs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+    .tab-btn {
+        margin: 0;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: #0f172a;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .tab-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+    .tab-btn.active {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        border-color: transparent;
+    }
+    .tab-panel {
+        display: none;
+    }
+    .tab-panel.active {
+        display: block;
+    }
+    .resource-box {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 12px;
+    }
+    .resource-box h3 {
+        margin: 0 0 10px;
+        color: var(--primary);
+    }
+    .book-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+    .chip {
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    .search-input {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px;
+        margin-bottom: 12px;
+        font-size: 0.96rem;
+    }
+    .dict-item {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px;
+        margin-bottom: 10px;
+        background: #fff;
+    }
+    .dict-item h4 {
+        margin: 0 0 6px;
+        color: #0f172a;
+    }
+    .dict-item p {
+        margin: 0;
+        color: #334155;
+        line-height: 1.5;
+    }
+    .dict-meta {
+        margin-top: 8px;
+        color: #64748b;
+        font-size: 0.86rem;
+    }
+    .dict-tags {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .dict-tag {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #bfdbfe;
+        border-radius: 999px;
+        padding: 3px 8px;
+        font-size: 0.78rem;
+    }
+    .search-meta {
+        margin-top: -4px;
+        margin-bottom: 10px;
+        color: #64748b;
+        font-size: 0.86rem;
+    }
+    .liturgy-nav {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+    .liturgy-btn {
+        margin: 0;
+        background: #eef2ff;
+        border: 1px solid #c7d2fe;
+        color: #1e3a8a;
+        border-radius: 8px;
+        padding: 10px 8px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    .liturgy-btn.active {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        border-color: transparent;
+    }
+    .liturgy-content {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+        line-height: 1.6;
+        white-space: pre-line;
+    }
+    @media (max-width: 860px) {
+        .quick-nav {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .month-selector {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .book-list {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .liturgy-nav {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 560px) {
+        .page {
+            padding: 18px 12px 24px;
+        }
+        .container {
+            padding: 14px;
+        }
+        .month-selector {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .tabs {
+            grid-template-columns: 1fr;
+        }
+        .book-list {
+            grid-template-columns: 1fr;
+        }
+        .liturgy-nav {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 </head>
 <body>
-
-<h1>📖 Préparation de leçon - ECODIM 2026</h1>
-
-<div class="container">
-    
-    <!-- Navigation mois avec bouton reset -->
-    <div class="quick-nav">
-        <div class="month-selector">
-            <button class="month-btn" onclick="filterMonth('Janvier')">Janvier</button>
-            <button class="month-btn" onclick="filterMonth('Février')">Février</button>
-            <button class="month-btn" onclick="filterMonth('Mars')">Mars</button>
-            <button class="month-btn" onclick="filterMonth('Avril')">Avril</button>
-            <button class="month-btn" onclick="filterMonth('Mai')">Mai</button>
-            <button class="month-btn" onclick="filterMonth('Juin')">Juin</button>
-            <button class="month-btn" onclick="filterMonth('Juillet')">Juillet</button>
-            <button class="month-btn" onclick="filterMonth('Août')">Août</button>
-            <button class="month-btn" onclick="filterMonth('Septembre')">Septembre</button>
-            <button class="month-btn" onclick="filterMonth('Octobre')">Octobre</button>
-            <button class="month-btn" onclick="filterMonth('Novembre')">Novembre</button>
-            <button class="month-btn" onclick="filterMonth('Décembre')">Décembre</button>
+<div id="accessGate" class="access-gate" role="dialog" aria-labelledby="accessSiteTitle" aria-modal="true">
+    <div class="access-panel">
+        <div class="access-logo-wrap">
+            <svg class="access-logo" viewBox="0 0 440 220" xmlns="http://www.w3.org/2000/svg" alt="Symboles éducatifs — Bible, Cahier et Stylo">
+                <defs>
+                    <linearGradient id="bibleBrown" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#4A2511;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="bibleSpine" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#A0522D;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="notebookBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#4169E1;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="penRed" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FF2D2D;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#CC0000;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <!-- Bible fermée -->
+                <g>
+                    <!-- Ombre -->
+                    <ellipse cx="85" cy="178" rx="50" ry="8" fill="#000" opacity="0.15"/>
+                    <!-- Couverture avant -->
+                    <rect x="35" y="50" width="95" height="125" fill="url(#bibleBrown)" stroke="#2a1810" stroke-width="2" rx="5"/>
+                    <!-- Bordure dorée -->
+                    <rect x="42" y="58" width="81" height="109" fill="none" stroke="#D4AF37" stroke-width="2" rx="2" opacity="0.8"/>
+                    <!-- Croix dorée -->
+                    <g transform="translate(82.5, 95)">
+                        <rect x="-2" y="-15" width="4" height="30" fill="#FFD700"/>
+                        <rect x="-12" y="-2" width="24" height="4" fill="#FFD700"/>
+                    </g>
+                    <!-- Ombrage -->
+                    <rect x="35" y="50" width="5" height="125" fill="#000" opacity="0.1" rx="5"/>
+                </g>
+                <!-- Cahier/Notebook -->
+                <g>
+                    <!-- Ombre -->
+                    <ellipse cx="222" cy="178" rx="55" ry="8" fill="#000" opacity="0.15"/>
+                    <!-- Couverture -->
+                    <rect x="170" y="45" width="105" height="135" fill="url(#notebookBlue)" stroke="#0F2A5F" stroke-width="2" rx="5"/>
+                    <!-- Reliure centrale -->
+                    <rect x="215" y="45" width="4" height="135" fill="#0F2A5F" opacity="0.5"/>
+                    <!-- Lignes de pages -->
+                    <line x1="180" y1="70" x2="260" y2="70" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="180" y1="85" x2="260" y2="85" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="180" y1="100" x2="260" y2="100" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="180" y1="115" x2="260" y2="115" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="180" y1="130" x2="260" y2="130" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="180" y1="145" x2="260" y2="145" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <!-- Marque de page -->
+                    <rect x="265" y="50" width="8" height="60" fill="#FF6B6B" rx="2"/>
+                    <!-- Ombrage -->
+                    <rect x="170" y="45" width="5" height="135" fill="#000" opacity="0.1" rx="5"/>
+                </g>
+                <!-- Stylo BIC rouge -->
+                <g>
+                    <!-- Ombre -->
+                    <ellipse cx="320" cy="178" rx="18" ry="8" fill="#000" opacity="0.15"/>
+                    <!-- Corps du stylo -->
+                    <rect x="310" y="60" width="18" height="105" fill="url(#penRed)" stroke="#990000" stroke-width="1.5" rx="3"/>
+                    <!-- Clip doré -->
+                    <rect x="313" y="50" width="12" height="12" fill="#FFD700" stroke="#DAA520" stroke-width="1" rx="2"/>
+                    <!-- Agrafe du clip -->
+                    <path d="M 318 55 Q 318 60 316 60" stroke="#DAA520" stroke-width="1" fill="none"/>
+                    <path d="M 318 55 Q 318 60 320 60" stroke="#DAA520" stroke-width="1" fill="none"/>
+                    <!-- Pointe/Mine -->
+                    <circle cx="319" cy="168" r="3" fill="#333"/>
+                    <path d="M 317 165 L 319 168 L 321 165 Z" fill="#1a1a1a"/>
+                    <!-- Brillant -->
+                    <rect x="312" y="65" width="3" height="40" fill="#FFF" opacity="0.2" rx="1.5"/>
+                </g>
+            </svg>
         </div>
-        <button class="reset-btn" onclick="resetFilter()">Tous les mois</button>
+        <h1 id="accessSiteTitle" class="access-site-title">Preparation de lecon - ECODIM 2026</h1>
+        <h2 id="accessGateTitle" class="access-title">Accès réservé</h2>
+        <p class="access-intro">Saisissez votre identifiant pour consulter le lectionnaire. Une seule session active à la fois par identifiant sur cet appareil (un nouvel onglet qui se connecte avec le même identifiant déconnecte les autres).</p>
+        <form id="accessForm" class="access-form" autocomplete="username">
+            <label class="access-label" for="accessIdentifier">Identifiant</label>
+            <input class="access-input" type="text" id="accessIdentifier" name="accessIdentifier" required placeholder="Votre identifiant" autofocus>
+            <p id="accessError" class="access-error" role="alert" aria-live="polite"></p>
+            <button type="submit" class="primary-btn access-submit">Accéder</button>
+        </form>
+        <div class="contact-info-end">
+            <p>📞 Pour obtenir ton Identifiant, contacte le Moniteur <strong>Tirbuce Beda</strong> <a href="tel:+225708190886">+225 07 08 19 08 86</a>.</p>
+            <p class="contact-note"><strong>NB :</strong> 500 F l'identifiant</p>
+        </div>
     </div>
-    
-    <!-- Compteur de dimanches -->
-    <div class="counter" id="counter">52 dimanches au total</div>
-    
-    <label for="sundaySelect">📅 Choisir un dimanche :</label>
-    <select id="sundaySelect">
+</div>
+
+<div id="appRoot" class="app-root" hidden>
+<div class="page">
+    <header class="hero">
+        <div class="hero-brand">
+            <svg class="hero-logo" viewBox="0 0 440 220" xmlns="http://www.w3.org/2000/svg" alt="Symboles éducatifs — Bible, Cahier et Stylo">
+                <defs>
+                    <linearGradient id="bibleBrown" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#4A2511;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="bibleSpine" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#A0522D;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="notebookBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#4169E1;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="penRed" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FF2D2D;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#CC0000;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <!-- Bible fermée -->
+                <g>
+                    <!-- Ombre -->
+                    <ellipse cx="85" cy="178" rx="50" ry="8" fill="#000" opacity="0.15"/>
+                    <!-- Couverture avant -->
+                    <rect x="35" y="50" width="95" height="125" fill="url(#bibleBrown)" stroke="#2a1810" stroke-width="2" rx="5"/>
+                    <!-- Bordure dorée -->
+                    <rect x="42" y="58" width="81" height="109" fill="none" stroke="#D4AF37" stroke-width="2" rx="2" opacity="0.8"/>
+                    <!-- Croix dorée -->
+                    <g transform="translate(82.5, 95)">
+                        <rect x="-2" y="-15" width="4" height="30" fill="#FFD700"/>
+                        <rect x="-12" y="-2" width="24" height="4" fill="#FFD700"/>
+                    </g>
+                    <!-- Ombrage -->
+                    <rect x="35" y="50" width="5" height="125" fill="#000" opacity="0.1" rx="5"/>
+                </g>
+                <!-- Cahier/Notebook -->
+                <g>
+                    <!-- Ombre -->
+                    <ellipse cx="222" cy="178" rx="55" ry="8" fill="#000" opacity="0.15"/>
+                    <!-- Couverture -->
+                    <rect x="170" y="45" width="105" height="135" fill="url(#notebookBlue)" stroke="#0F2A5F" stroke-width="2" rx="5"/>
+                    <!-- Reliure centrale -->
+                    <rect x="215" y="45" width="4" height="135" fill="#0F2A5F" opacity="0.5"/>
+                    <!-- Lignes de pages -->
+                    <line x1="180" y1="70" x2="260" y2="70" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="180" y1="85" x2="260" y2="85" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="180" y1="100" x2="260" y2="100" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="180" y1="115" x2="260" y2="115" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="180" y1="130" x2="260" y2="130" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="180" y1="145" x2="260" y2="145" stroke="#87CEEB" stroke-width="1.5" opacity="0.7"/>
+                    <!-- Marque de page -->
+                    <rect x="265" y="50" width="8" height="60" fill="#FF6B6B" rx="2"/>
+                    <!-- Ombrage -->
+                    <rect x="170" y="45" width="5" height="135" fill="#000" opacity="0.1" rx="5"/>
+                </g>
+                <!-- Stylo BIC rouge -->
+                <g>
+                    <!-- Ombre -->
+                    <ellipse cx="320" cy="178" rx="18" ry="8" fill="#000" opacity="0.15"/>
+                    <!-- Corps du stylo -->
+                    <rect x="310" y="60" width="18" height="105" fill="url(#penRed)" stroke="#990000" stroke-width="1.5" rx="3"/>
+                    <!-- Clip doré -->
+                    <rect x="313" y="50" width="12" height="12" fill="#FFD700" stroke="#DAA520" stroke-width="1" rx="2"/>
+                    <!-- Agrafe du clip -->
+                    <path d="M 318 55 Q 318 60 316 60" stroke="#DAA520" stroke-width="1" fill="none"/>
+                    <path d="M 318 55 Q 318 60 320 60" stroke="#DAA520" stroke-width="1" fill="none"/>
+                    <!-- Pointe/Mine -->
+                    <circle cx="319" cy="168" r="3" fill="#333"/>
+                    <path d="M 317 165 L 319 168 L 321 165 Z" fill="#1a1a1a"/>
+                    <!-- Brillant -->
+                    <rect x="312" y="65" width="3" height="40" fill="#FFF" opacity="0.2" rx="1.5"/>
+                </g>
+            </svg>
+        </div>
+        <div class="hero-top">
+            <div class="hero-text">
+                <h1>Preparation de lecon - ECODIM 2026</h1>
+                <p>Plateforme de preparation pedagogique hebdomadaire pour l'ecole du dimanche.</p>
+            </div>
+            <button type="button" class="logout-btn" id="logoutBtn" title="Quitter la session">Se déconnecter</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="tabs" aria-label="Onglets de contenu">
+            <button class="tab-btn" data-tab="liturgyTab" onclick="switchTab('liturgyTab')">Liturgie</button>
+            <button class="tab-btn active" data-tab="prepTab" onclick="switchTab('prepTab')">Preparation</button>
+            <button class="tab-btn" data-tab="bibleTab" onclick="switchTab('bibleTab')">Bible</button>
+            <button class="tab-btn" data-tab="dictTab" onclick="switchTab('dictTab')">Dictionnaire biblique</button>
+        </section>
+
+        <section class="control-panel tab-panel active" id="prepControls">
+            <div class="quick-nav">
+                <div class="month-selector">
+                    <button class="month-btn" onclick="filterMonth('Janvier')">Janvier</button>
+                    <button class="month-btn" onclick="filterMonth('Février')">Février</button>
+                    <button class="month-btn" onclick="filterMonth('Mars')">Mars</button>
+                    <button class="month-btn" onclick="filterMonth('Avril')">Avril</button>
+                    <button class="month-btn" onclick="filterMonth('Mai')">Mai</button>
+                    <button class="month-btn" onclick="filterMonth('Juin')">Juin</button>
+                    <button class="month-btn" onclick="filterMonth('Juillet')">Juillet</button>
+                    <button class="month-btn" onclick="filterMonth('Août')">Août</button>
+                    <button class="month-btn" onclick="filterMonth('Septembre')">Septembre</button>
+                    <button class="month-btn" onclick="filterMonth('Octobre')">Octobre</button>
+                    <button class="month-btn" onclick="filterMonth('Novembre')">Novembre</button>
+                    <button class="month-btn" onclick="filterMonth('Décembre')">Décembre</button>
+                </div>
+                <button class="reset-btn" onclick="resetFilter()">Tous les mois</button>
+            </div>
+
+            <div class="counter" id="counter">52 dimanches au total</div>
+            <input id="prepSearch" class="search-input" type="text" placeholder="Recherche preparation (mot, theme, reference)">
+            <p id="prepSearchCount" class="search-meta"></p>
+
+            <label class="label-title" for="sundaySelect">Choisir un dimanche</label>
+            <select id="sundaySelect">
         <option value="">-- Sélectionnez un dimanche --</option>
         <option value="04 Janvier">04 Janvier</option>
         <option value="11 Janvier">11 Janvier</option>
@@ -275,23 +845,75 @@
         <option value="20 Décembre">20 Décembre</option>
         <option value="25 Décembre">25 Décembre</option>
         <option value="27 Décembre">27 Décembre</option>
-    </select>
+            </select>
 
-    <label for="levelSelect">🎯 Choisir le niveau :</label>
-    <select id="levelSelect">
+            <label class="label-title" for="levelSelect">Choisir le niveau</label>
+            <select id="levelSelect">
         <option value="">-- Sélectionnez un niveau --</option>
         <option value="1">Niveau 1</option>
         <option value="2">Niveau 2</option>
         <option value="3">Niveau 3</option>
-    </select>
+            </select>
 
-    <button onclick="showDetails()">Voir la préparation</button>
+            <button class="primary-btn" onclick="showDetails()">Voir la preparation</button>
+        </section>
 
-    <div class="details" id="details">
-        <p style="text-align: center; color: #666;">👋 Sélectionnez un dimanche et un niveau</p>
+        <section class="details tab-panel active" id="prepTab">
+            <div id="details">
+                <p class="empty-state">Selectionnez un dimanche et un niveau pour afficher la preparation.</p>
+            </div>
+        </section>
+
+        <section class="details tab-panel" id="liturgyTab">
+            <div class="liturgy-nav">
+                <button class="liturgy-btn active" onclick="selectLiturgyPart('intro', this)">Introduction</button>
+                <button class="liturgy-btn" onclick="selectLiturgyPart('ordre', this)">Ordre et discipline</button>
+                <button class="liturgy-btn" onclick="selectLiturgyPart('niveau1', this)">Niveau 1</button>
+                <button class="liturgy-btn" onclick="selectLiturgyPart('niveau23', this)">Niveau 2 et 3</button>
+                <button class="liturgy-btn" onclick="selectLiturgyPart('partie1', this)">Partie 1</button>
+                <button class="liturgy-btn" onclick="selectLiturgyPart('partie2', this)">Partie 2</button>
+                <button class="liturgy-btn" onclick="selectLiturgyPart('partie3', this)">Partie 3</button>
+                <button class="liturgy-btn" onclick="selectLiturgyPart('partie4', this)">Partie 4</button>
+                <button class="liturgy-btn" onclick="selectLiturgyPart('partie5', this)">Partie 5</button>
+                <button class="liturgy-btn" onclick="selectLiturgyPart('annexes', this)">Annexes</button>
+            </div>
+            <article class="liturgy-content" id="liturgyContent"></article>
+        </section>
+
+        <section class="details tab-panel" id="bibleTab">
+            <div class="resource-box">
+                <h3>Livres de la Bible</h3>
+                <p style="margin-top:0;color:#64748b;">Navigation rapide des livres de l'Ancien et du Nouveau Testament.</p>
+            </div>
+            <input id="bibleSearch" class="search-input" type="text" placeholder="Recherche Bible (mot, livre, reference ex: Jean 3:16)">
+            <p id="bibleCount" class="search-meta"></p>
+            <div class="resource-box">
+                <h3>Ancien Testament</h3>
+                <div id="oldTestamentList" class="book-list"></div>
+            </div>
+            <div class="resource-box">
+                <h3>Nouveau Testament</h3>
+                <div id="newTestamentList" class="book-list"></div>
+            </div>
+        </section>
+
+        <section class="details tab-panel" id="dictTab">
+            <input id="dictionarySearch" class="search-input" type="text" placeholder="Rechercher un mot biblique (ex: grace, foi, alliance)">
+            <p id="dictionaryCount" class="dict-meta"></p>
+            <div id="dictionaryList"></div>
+        </section>
+    </main>
+
+    <!-- Message de contact en bas de page (texte blanc) -->
+    <div class="contact-info-end">
+        <p>📞 Pour obtenir ton Identifiant, contacte le Moniteur <strong>Tirbuce Beda</strong> <a href="tel:+225708190886">+225 07 08 19 08 86</a>.</p>
+        <p class="contact-note"><strong>NB :</strong> 500 F l'identifiant</p>
     </div>
 </div>
+</div>
 
+<script src="access-config.js"></script>
+<script src="auth.js"></script>
 <script>
 // ===== TOUTES LES PRÉPARATIONS DE LEÇON =====
 const lessons = {
@@ -952,7 +1574,7 @@ const lessons = {
     "29 Juin": {
         "titre": "LES SYRIENS FRAPPÉS D’AVEUGLEMENT",
         "lecon": "Leçon 24",
-        "reference": "3 Rois 6:8-23",
+        "reference": "1 Rois 6:8-23",
         "versetSouligner": "Je prie pour me libérer de tous les liens maléfiques.",
         "objectifSpecifique": "Je prie pour me libérer de tous les liens maléfiques.",
         "objectifOperationnel": "Je retiens que la prière et la confiance en Dieu brisent toutes les chaînes.",
@@ -1694,128 +2316,9 @@ const lessons = {
     }
 };
 
-function showDetails() {
-    const selectedSunday = document.getElementById('sundaySelect').value;
-    const selectedLevel = document.getElementById('levelSelect').value;
-    const detailsDiv = document.getElementById('details');
-    
-    if (!selectedSunday || !selectedLevel) {
-        detailsDiv.innerHTML = '<p style="color: red;">⚠️ Veuillez sélectionner un dimanche ET un niveau.</p>';
-        return;
-    }
-    
-    // Gestion spéciale pour les dates avec plusieurs versions
-    let lesson;
-    if (selectedSunday === "02 Août" && selectedLevel === "3") {
-        lesson = lessons["02 Août (3)"];
-    } else if (selectedSunday === "01 Novembre" && selectedLevel === "3") {
-        lesson = lessons["02 Novembre"];
-    } else if (selectedSunday === "01 Novembre" && (selectedLevel === "1" || selectedLevel === "2")) {
-        lesson = lessons["01 Novembre"];
-    } else if (selectedSunday === "26 Octobre" && selectedLevel === "3") {
-        lesson = lessons["26 Octobre"];
-    } else if (selectedSunday === "25 Octobre" && selectedLevel === "3") {
-        lesson = lessons["26 Octobre"];
-    } else {
-        lesson = lessons[selectedSunday];
-    }
-    
-    if (!lesson) {
-        detailsDiv.innerHTML = '<p style="color: red;">❌ Aucune préparation pour cette date.</p>';
-        return;
-    }
-    
-    // Construction de l'affichage avec résumé en premier
-    let html = `
-        <div class="summary">
-            <h3 style="color: white; margin-top: 0;">📅 ${selectedSunday} - Niveau ${selectedLevel}</h3>
-            <p><span class="label">📖 Leçon :</span> <span class="value">${lesson.lecon || '—'}</span></p>
-            <p><span class="label">📌 Thème :</span> <span class="value">${lesson.titre}</span></p>
-            <p><span class="label">🔖 Référence :</span> <span class="value">${lesson.reference}</span></p>
-            <p><span class="label">🎯 Objectif spécifique :</span> <span class="value">${lesson.objectifSpecifique}</span></p>
-        </div>
-        
-        <div class="preparation">
-            <h3>Préparation détaillée</h3>
-            
-            <div class="verse">📌 Verset à souligner : ${lesson.versetSouligner}</div>
-            
-            <h4>Objectif opérationnel</h4>
-            <p>${lesson.objectifOperationnel}</p>
-            
-            <h4>Introduction</h4>
-            <p>${lesson.introduction}</p>
-            
-            <h4>Progression</h4>
-            <ul>
-    `;
-    
-    lesson.progression.forEach(point => {
-        html += `<li>${point}</li>`;
-    });
-    
-    html += `</ul>
-            
-            <div class="highlight">🔔 Point culminant : ${lesson.pointCulminant}</div>
-            
-            <p><strong>👉 Message à transmettre :</strong> ${lesson.messageTransmettre}</p>
-            
-            <h4>Message central</h4>
-            <p>${lesson.messageCentral}</p>
-            
-            <h4>Verset à retenir</h4>
-            <div class="verse">📖 ${lesson.versetRetenir}</div>
-            
-            <h4>Évaluation</h4>
-            <ol>
-    `;
-    
-    lesson.evaluation.forEach(question => {
-        html += `<li>${question}</li>`;
-    });
-    
-    html += `</ol>
-        </div>`;
-    
-    detailsDiv.innerHTML = html;
-}
-
-function filterMonth(month) {
-    const select = document.getElementById('sundaySelect');
-    let visibleCount = 0;
-    
-    for (let option of select.options) {
-        if (option.value === '') continue;
-        
-        if (option.value.includes(month)) {
-            option.style.display = '';
-            visibleCount++;
-        } else {
-            option.style.display = 'none';
-        }
-    }
-    
-    document.getElementById('counter').textContent = visibleCount + ' dimanche(s) en ' + month;
-    select.value = '';
-}
-
-function resetFilter() {
-    const select = document.getElementById('sundaySelect');
-    let totalCount = 0;
-    
-    for (let option of select.options) {
-        option.style.display = '';
-        if (option.value !== '') totalCount++;
-    }
-    
-    document.getElementById('counter').textContent = totalCount + ' dimanches au total';
-    select.value = '';
-}
-
-window.onload = function() {
-    resetFilter();
-};
 </script>
+<script src="liturgy-data.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
